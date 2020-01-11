@@ -1,4 +1,4 @@
-module github.com/weihaoranW/vchatintf
+module vchatintf
 
 go 1.13
 
