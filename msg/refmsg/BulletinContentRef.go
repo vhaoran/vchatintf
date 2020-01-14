@@ -1,0 +1,21 @@
+package refmsg
+
+type BulletinContentRef struct {
+	// 公众号id
+	BID int64 `json:"bid,omitempty"   bson:"bid,omitempty"`
+	// 页眉 可以是有格式内容
+	Header interface{} `json:"header,omitempty"   bson:"header,omitempty"`
+
+	//标题    可以是有格式内容
+	Title interface{} `json:"title,omitempty"   bson:"title,omitempty"`
+	//副标题	可以是有格式内容
+	Title1 interface{} `json:"title_1,omitempty"   bson:"title_1,omitempty"`
+	//  摘要(显示在推送区域)		可以是有格式内容
+	Brief interface{} `json:"brief,omitempty"   bson:"brief,omitempty"`
+	//  内容
+	Content interface{} `json:"content,omitempty"   bson:"content,omitempty"`
+	// 回复及点赞
+	Reply interface{} `json:"reply,omitempty"   bson:"reply,omitempty"`
+	// 页脚
+	Footer interface{} `json:"footer,omitempty"   bson:"footer,omitempty"`
+}
