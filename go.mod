@@ -1,9 +1,9 @@
-module vchatintf
+module github.com/vhaoran/vchatintf
 
 go 1.13
 
 require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/go-kit/kit v0.9.0
-	github.com/weihaoranW/vchat v1.2.7
+	github.com/vhaoran/vchat v1.4.0
 )

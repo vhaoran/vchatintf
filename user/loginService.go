@@ -1,7 +1,6 @@
 package intf
 
 //for snippet用于标准返回值的微服务接口
-
 import (
 	"context"
 	"encoding/json"
@@ -11,7 +10,7 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
-	"github.com/weihaoranW/vchat/lib/ykit"
+	"github.com/vhaoran/vchat/lib/ykit"
 )
 
 const (
