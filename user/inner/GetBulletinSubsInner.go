@@ -3,13 +3,13 @@ package inner
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
+	"github.com/vhaoran/vchat/lib/ylog"
 )
 
 const (
@@ -45,7 +45,7 @@ type (
 
 func (r *GetBulletinSubsInnerHandler) MakeLocalEndpoint(svc GetBulletinSubsInnerService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  GetBulletinSubsInner ###########")
+		ylog.Debug("#############  GetBulletinSubsInner ###########")
 		spew.Dump(ctx)
 
 		in := request.(*GetBulletinSubsInnerRequest)
