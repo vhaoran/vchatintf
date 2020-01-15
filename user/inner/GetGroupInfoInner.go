@@ -25,12 +25,12 @@ const (
 
 type (
 	GetGroupInfoInnerService interface {
-		  //
+		//
 		Exec(in *GetGroupInfoInnerRequest) (*refuser.GroupInfoRef, error)
 	}
 
 	//input data
-	  //
+	//
 	GetGroupInfoInnerRequest struct {
 		GID int64 `json:"gid,omitempty"`
 	}
@@ -53,7 +53,7 @@ func (r *GetGroupInfoInnerHandler) MakeLocalEndpoint(svc GetGroupInfoInnerServic
 		fmt.Println("#############  GetGroupInfoInner ###########")
 		spew.Dump(ctx)
 
-		  //
+		//
 		in := request.(*GetGroupInfoInnerRequest)
 		return svc.Exec(in)
 	}
@@ -98,11 +98,21 @@ func (r *GetGroupInfoInnerHandler) HandlerSD(mid []endpoint.Middleware,
 	return r.base.HandlerSD(
 		context.Background(),
 		intf.MSTAG,
-		  //
+		//
 		"POST",
 		GetGroupInfoInner_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
+}
+
+func (r *GetGroupInfoInnerHandler) ProxySD() endpoint.Endpoint {
+	return r.base.ProxyEndpointSD(
+		context.Background(),
+		MSTAG,
+		"POST",
+		GetGroupInfoInner_HANDLER_PATH,
+		r.DecodeRequest,
+		r.DecodeResponse)
 }

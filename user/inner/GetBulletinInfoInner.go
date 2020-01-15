@@ -17,16 +17,16 @@ import (
 )
 
 const (
-	GetBulletinInfoRef_HANDLER_PATH = "/GetBulletinInfoRef"
+	GetBulletinInfoInner_HANDLER_PATH = "/GetBulletinInfoRef"
 )
 
 type (
-	GetBulletinInfoRefService interface {
-		Exec(in *GetBulletinInfoRefRequest) (*refuser.BulletinInfoRef, error)
+	GetBulletinInfoInnerService interface {
+		Exec(in *GetBulletinInfoInnerRequest) (*refuser.BulletinInfoRef, error)
 	}
 
 	//input data
-	GetBulletinInfoRefRequest struct {
+	GetBulletinInfoInnerRequest struct {
 		BID int64 `json:"bid,omitempty"`
 	}
 
@@ -38,28 +38,28 @@ type (
 	//}
 
 	// handler implements
-	GetBulletinInfoRefHandler struct {
+	GetBulletinInfoInnerHandler struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *GetBulletinInfoRefHandler) MakeLocalEndpoint(svc GetBulletinInfoRefService) endpoint.Endpoint {
+func (r *GetBulletinInfoInnerHandler) MakeLocalEndpoint(svc GetBulletinInfoInnerService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		fmt.Println("#############  GetBulletinInfoRef ###########")
 		spew.Dump(ctx)
 
-		in := request.(*GetBulletinInfoRefRequest)
+		in := request.(*GetBulletinInfoInnerRequest)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *GetBulletinInfoRefHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(GetBulletinInfoRefRequest), ctx, req)
+func (r *GetBulletinInfoInnerHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(GetBulletinInfoInnerRequest), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *GetBulletinInfoRefHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *GetBulletinInfoInnerHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -68,7 +68,7 @@ func (r *GetBulletinInfoRefHandler) DecodeResponse(_ context.Context, res *http.
 }
 
 //handler for router，微服务本地接口，
-func (r *GetBulletinInfoRefHandler) HandlerLocal(service GetBulletinInfoRefService,
+func (r *GetBulletinInfoInnerHandler) HandlerLocal(service GetBulletinInfoInnerService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -87,15 +87,35 @@ func (r *GetBulletinInfoRefHandler) HandlerLocal(service GetBulletinInfoRefServi
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *GetBulletinInfoRefHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *GetBulletinInfoInnerHandler) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		GetBulletinInfoRef_HANDLER_PATH,
+		GetBulletinInfoInner_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
+}
+
+//func (r *GetBulletinInfoInnerHandler) ProxySD() endpoint.Endpoint {
+//	return r.base.ProxyEndpointSD(
+//		context.Background(),
+//		MSTAG,
+//		"POST",
+//		GetBulletinInfoInner_HANDLER_PATH,
+//		r.DecodeRequest,
+//		r.DecodeResponse)
+//}
+
+func (r *GetBulletinInfoInnerHandler) ProxySD() endpoint.Endpoint {
+	return r.base.ProxyEndpointSD(
+		context.Background(),
+		MSTAG,
+		"POST",
+		GetBulletinInfoInner_HANDLER_PATH,
+		r.DecodeRequest,
+		r.DecodeResponse)
 }

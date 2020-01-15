@@ -106,3 +106,13 @@ func (r *GetUserInfoInnerHandler) HandlerSD(mid []endpoint.Middleware,
 		mid,
 		options...)
 }
+
+func (r *GetUserInfoInnerHandler) ProxySD() endpoint.Endpoint {
+	return r.base.ProxyEndpointSD(
+		context.Background(),
+		MSTAG,
+		"POST",
+		GetUserInfoInner_HANDLER_PATH,
+		r.DecodeRequest,
+		r.DecodeResponse)
+}
