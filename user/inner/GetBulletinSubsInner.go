@@ -13,21 +13,21 @@ import (
 )
 
 const (
-	GetGroupMembersInner_HANDLER_PATH = "/GetGroupMembersInner"
+	GetBulletinSubsInner_HANDLER_PATH = "/GetBulletinSubsInner"
 )
 
 type (
-	GetGroupMembersInnerService interface {
-		Exec(in *GetGroupMembersInnerRequest) ([]*GetGroupMembersInnerResponse, error)
+	GetBulletinSubsInnerService interface {
+		Exec(in *GetBulletinSubsInnerRequest) ([]*GetBulletinSubsInnerResponse, error)
 	}
 
 	//input data
-	GetGroupMembersInnerRequest struct {
-		GID int64 `json:"gid,omitempty"`
+	GetBulletinSubsInnerRequest struct {
+		BID int64 `json:"bid,omitempty"`
 	}
 
 	//output data
-	GetGroupMembersInnerResponse struct {
+	GetBulletinSubsInnerResponse struct {
 		UID int64 `json:"uid,omitempty"`
 		//冗余字段，提升性能,用户帐号
 		UserCodeRef string `json:"user_code_ref,omitempty"`
@@ -38,28 +38,28 @@ type (
 	}
 
 	// handler implements
-	GetGroupMembersInnerHandler struct {
+	GetBulletinSubsInnerHandler struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *GetGroupMembersInnerHandler) MakeLocalEndpoint(svc GetGroupMembersInnerService) endpoint.Endpoint {
+func (r *GetBulletinSubsInnerHandler) MakeLocalEndpoint(svc GetBulletinSubsInnerService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  GetGroupMembersInner ###########")
+		fmt.Println("#############  GetBulletinSubsInner ###########")
 		spew.Dump(ctx)
 
-		in := request.(*GetGroupMembersInnerRequest)
+		in := request.(*GetBulletinSubsInnerRequest)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *GetGroupMembersInnerHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(GetGroupMembersInnerRequest), ctx, req)
+func (r *GetBulletinSubsInnerHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(GetBulletinSubsInnerRequest), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *GetGroupMembersInnerHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *GetBulletinSubsInnerHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -68,7 +68,7 @@ func (r *GetGroupMembersInnerHandler) DecodeResponse(_ context.Context, res *htt
 }
 
 //handler for router，微服务本地接口，
-func (r *GetGroupMembersInnerHandler) HandlerLocal(service GetGroupMembersInnerService,
+func (r *GetBulletinSubsInnerHandler) HandlerLocal(service GetBulletinSubsInnerService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -87,25 +87,25 @@ func (r *GetGroupMembersInnerHandler) HandlerLocal(service GetGroupMembersInnerS
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *GetGroupMembersInnerHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *GetBulletinSubsInnerHandler) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		GetGroupMembersInner_HANDLER_PATH,
+		GetBulletinSubsInner_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *GetGroupMembersInnerHandler) ProxySD() endpoint.Endpoint {
+func (r *GetBulletinSubsInnerHandler) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		GetGroupMembersInner_HANDLER_PATH,
+		GetBulletinSubsInner_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
 }
