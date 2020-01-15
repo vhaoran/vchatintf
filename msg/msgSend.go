@@ -38,7 +38,7 @@ type (
 
 		//目标用户ID
 		ToUID       int64  `json:"to_uid,omitempty"   bson:"to_uid,omitempty"`
-		UserCodeRef string `json:"usercdde_ref,omitempty"   bson:"usercdde_ref,omitempty"`
+		UserCodeRef string `json:"user_code_ref,omitempty"   bson:"user_code_ref,omitempty"`
 		NickRef     string `json:"nick_ref,omitempty"   bson:"nick_ref,omitempty"`
 		IconRef     string `json:"icon_ref,omitempty"   bson:"icon_ref,omitempty"`
 		ToBID       int64  `json:"to_bid,omitempty"   bson:"to_bid,omitempty"`
