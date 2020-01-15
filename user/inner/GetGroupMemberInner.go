@@ -18,7 +18,7 @@ const (
 
 type (
 	GetGroupMembersInnerService interface {
-		Exec(in *GetGroupMembersInnerRequest) (*GetGroupMembersInnerResponse, error)
+		Exec(in *GetGroupMembersInnerRequest) ([]*GetGroupMembersInnerResponse, error)
 	}
 
 	//input data

@@ -19,7 +19,7 @@ const (
 //获取用户所有好友
 type (
 	GetUserFriendsInnerService interface {
-		Exec(in *GetUserFriendsInnerRequest) (*GetUserFriendsInnerResponse, error)
+		Exec(in *GetUserFriendsInnerRequest) ([]*GetUserFriendsInnerResponse, error)
 	}
 
 	//input data
