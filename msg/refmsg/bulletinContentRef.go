@@ -1,6 +1,14 @@
 package refmsg
 
+import (
+	"github.com/vhaoran/vchat/common/ytime"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
+
 type BulletinContentRef struct {
+	ID        primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
+	CreatedAt ytime.Date         `json:"created_at,omitempty"   bson:"created_at,omitempty"`
+
 	// 公众号id
 	BID int64 `json:"bid,omitempty"   bson:"bid,omitempty"`
 	// 页眉 可以是有格式内容
@@ -19,3 +27,4 @@ type BulletinContentRef struct {
 	// 页脚
 	Footer interface{} `json:"footer,omitempty"   bson:"footer,omitempty"`
 }
+
