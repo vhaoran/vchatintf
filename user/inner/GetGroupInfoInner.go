@@ -66,7 +66,7 @@ func (r *GetGroupInfoInnerHandler) DecodeRequest(ctx context.Context, req *http.
 
 //个人实现,参数不能修改
 func (r *GetGroupInfoInnerHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
-	var response ykit.Result
+	var response *refuser.GroupInfoRef
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
 	}
