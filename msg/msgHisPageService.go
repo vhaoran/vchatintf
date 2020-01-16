@@ -11,24 +11,25 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
+	"github.com/vhaoran/vchat/common/ypage"
 	"github.com/vhaoran/vchat/lib/ykit"
 )
 
 const (
 	//todo
-	CirclePrize_HANDLER_PATH = "/CirclePrize"
+	PageMsgHis_HANDLER_PATH = "/PageMsgHis"
 )
 
 type (
-	CirclePrizeService interface {
+	MsgHisPageService interface {
 		//todo
-		Exec(in *CirclePrizeRequest) (*ykit.Result, error)
+		Exec(in *PageMsgHisIn) (*ykit.Result, error)
 	}
 
 	//input data
 	//todo
-	CirclePrizeRequest struct {
-		S string `json:"s"`
+	PageMsgHisIn struct {
+		ypage.PageBean
 	}
 
 	//output data
@@ -39,29 +40,29 @@ type (
 	//}
 
 	// handler implements
-	CirclePrizeHandler struct {
+	PageMsgHisHandler struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *CirclePrizeHandler) MakeLocalEndpoint(svc CirclePrizeService) endpoint.Endpoint {
+func (r *PageMsgHisHandler) MakeLocalEndpoint(svc MsgHisPageService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  CirclePrize ###########")
+		fmt.Println("#############  PageMsgHis ###########")
 		spew.Dump(ctx)
 
 		//todo
-		in := request.(*CirclePrizeRequest)
+		in := request.(*PageMsgHisIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *CirclePrizeHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(CirclePrizeRequest), ctx, req)
+func (r *PageMsgHisHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(PageMsgHisIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *CirclePrizeHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *PageMsgHisHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -70,7 +71,7 @@ func (r *CirclePrizeHandler) DecodeResponse(_ context.Context, res *http.Respons
 }
 
 //handler for router，微服务本地接口，
-func (r *CirclePrizeHandler) HandlerLocal(service CirclePrizeService,
+func (r *PageMsgHisHandler) HandlerLocal(service MsgHisPageService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -89,14 +90,14 @@ func (r *CirclePrizeHandler) HandlerLocal(service CirclePrizeService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *CirclePrizeHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *PageMsgHisHandler) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		//todo
 		"POST",
-		CirclePrize_HANDLER_PATH,
+		PageMsgHis_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,

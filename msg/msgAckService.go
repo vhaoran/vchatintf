@@ -12,25 +12,24 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
-
-	"github.com/vhaoran/vchatintf/msg/refmsg"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 const (
 	//todo
-	BulletinPublish_HANDLER_PATH = "/BulletinPublish"
+	AckMsg_HANDLER_PATH = "/AckMsg"
 )
 
 type (
-	BulletinPublishService interface {
+	 MsgAckService interface {
 		//todo
-		Exec(in *BulletinPublishRequest) (*ykit.Result, error)
+		Exec(in *AckMsgIn) (*ykit.Result, error)
 	}
 
 	//input data
 	//todo
-	BulletinPublishRequest struct {
-		refmsg.BulletinContentRef
+	AckMsgIn struct {
+		MsgID primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
 	}
 
 	//output data
@@ -41,29 +40,29 @@ type (
 	//}
 
 	// handler implements
-	BulletinPublishHandler struct {
+	AckMsgHandler struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *BulletinPublishHandler) MakeLocalEndpoint(svc BulletinPublishService) endpoint.Endpoint {
+func (r *AckMsgHandler) MakeLocalEndpoint(svc MsgAckService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  BulletinPublish ###########")
+		fmt.Println("#############  AckMsg ###########")
 		spew.Dump(ctx)
 
 		//todo
-		in := request.(*BulletinPublishRequest)
+		in := request.(*AckMsgIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *BulletinPublishHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(BulletinPublishRequest), ctx, req)
+func (r *AckMsgHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(AckMsgIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *BulletinPublishHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *AckMsgHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -72,7 +71,7 @@ func (r *BulletinPublishHandler) DecodeResponse(_ context.Context, res *http.Res
 }
 
 //handler for router，微服务本地接口，
-func (r *BulletinPublishHandler) HandlerLocal(service BulletinPublishService,
+func (r *AckMsgHandler) HandlerLocal(service MsgAckService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -91,14 +90,14 @@ func (r *BulletinPublishHandler) HandlerLocal(service BulletinPublishService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *BulletinPublishHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *AckMsgHandler) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		//todo
 		"POST",
-		BulletinPublish_HANDLER_PATH,
+		AckMsg_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,

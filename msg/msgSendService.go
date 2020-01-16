@@ -22,12 +22,12 @@ const (
 type (
 	MsgSendService interface {
 		//todo
-		Exec(in *SendMsgRequest) (*ykit.Result, error)
+		Exec(in *SendMsgIn) (*ykit.Result, error)
 	}
 
 	//input data
 	//todo
-	SendMsgRequest struct {
+	SendMsgIn struct {
 		FromUID int64 `json:"from_uid,omitempty"   bson:"from_uid,omitempty"`
 
 		//0: 私信消息
@@ -70,14 +70,14 @@ func (r *SendMsgHandler) MakeLocalEndpoint(svc MsgSendService) endpoint.Endpoint
 		spew.Dump(ctx)
 
 		//todo
-		in := request.(*SendMsgRequest)
+		in := request.(*SendMsgIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
 func (r *SendMsgHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(SendMsgRequest), ctx, req)
+	return r.base.DecodeRequest(new(SendMsgIn), ctx, req)
 }
 
 //个人实现,参数不能修改

@@ -20,11 +20,11 @@ const (
 
 type (
 	CirclePublishService interface {
-		Exec(in *CirclePublishRequest) (*ykit.Result, error)
+		Exec(in *CirclePublishIn) (*ykit.Result, error)
 	}
 
 	//input data
-	CirclePublishRequest struct {
+	CirclePublishIn struct {
 		S string `json:"s"`
 	}
 
@@ -46,14 +46,14 @@ func (r *CirclePublishHandler) MakeLocalEndpoint(svc CirclePublishService) endpo
 		fmt.Println("#############  CirclePublish ###########")
 		spew.Dump(ctx)
 
-		in := request.(*CirclePublishRequest)
+		in := request.(*CirclePublishIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
 func (r *CirclePublishHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(CirclePublishRequest), ctx, req)
+	return r.base.DecodeRequest(new(CirclePublishIn), ctx, req)
 }
 
 //个人实现,参数不能修改
