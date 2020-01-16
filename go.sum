@@ -166,14 +166,6 @@ github.com/tidwall/match v1.0.1/go.mod h1:LujAq0jyVjBy028G1WhWfIzbpQfMO8bBZ6Tyb0
 github.com/tidwall/pretty v1.0.0/go.mod h1:XNkn88O1ChpSDQmQeStsy+sBenx6DDtFZJxhVysOjyk=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/ugorji/go v1.1.4/go.mod h1:uQMGLiO92mf5W77hV/PUCpI3pbzQx3CRekS0kk+RGrc=
-github.com/vhaoran/vchat v1.2.7 h1:oWuPb6hEsvUg3Q6kklr3lTkWqusve5NjFkfrv+f2TKE=
-github.com/vhaoran/vchat v1.2.7/go.mod h1:C3MPXpxxjaI58SnkhfASgaWqHi1o/bmaJAR7ahsuuSY=
-github.com/vhaoran/vchat v1.4.0 h1:H7BAE9vkySZZpic66JTsvV4bRDiYj1aggx/fRhQgZ7I=
-github.com/vhaoran/vchat v1.4.0/go.mod h1:mg0AJUF2dbt4+zad+s33HFA9VRZy7r7bXfBIyP5q4JY=
-github.com/vhaoran/vchat v1.4.2 h1:Hih5kRXqxaQyYJShzlTbGmL2NPSqE5XMF8Uj/QFjA/o=
-github.com/vhaoran/vchat v1.4.2/go.mod h1:mg0AJUF2dbt4+zad+s33HFA9VRZy7r7bXfBIyP5q4JY=
-github.com/vhaoran/vchat v1.4.5-0.20200116100006-336e5b49142c h1:kUZ0zfik0YAAMdHwseM8EaqD+hS1U0PoDtVIfzpZjrQ=
-github.com/vhaoran/vchat v1.4.5-0.20200116100006-336e5b49142c/go.mod h1:mg0AJUF2dbt4+zad+s33HFA9VRZy7r7bXfBIyP5q4JY=
 github.com/vhaoran/vchat v1.4.5 h1:7+Kpx7hvSb1NZKyQuh4fZXIer0kppVYg3r4zYYP/gto=
 github.com/vhaoran/vchat v1.4.5/go.mod h1:mg0AJUF2dbt4+zad+s33HFA9VRZy7r7bXfBIyP5q4JY=
 github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c/go.mod h1:lB8K/P019DLNhemzwFU4jHLhdvlE6uDZjXFejJXr49I=

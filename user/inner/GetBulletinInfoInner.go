@@ -60,7 +60,7 @@ func (r *GetBulletinInfoInnerHandler) DecodeRequest(ctx context.Context, req *ht
 
 //个人实现,参数不能修改
 func (r *GetBulletinInfoInnerHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
-	var response ykit.Result
+	var response *refuser.BulletinInfoRef
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
 	}
