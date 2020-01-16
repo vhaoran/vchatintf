@@ -26,12 +26,12 @@ const (
 
 type (
 	GetUserInfoInnerService interface {
-		Exec(in *GetUserInfoInnerRequest) (*refuser.UserInfoRef, error)
+		Exec(in *GetUserInfoInnerIn) (*refuser.UserInfoRef, error)
 	}
 
 	//input data
 	//
-	GetUserInfoInnerRequest struct {
+	GetUserInfoInnerIn struct {
 		UID int64 `json:"uid,omitempty"`
 	}
 
@@ -54,14 +54,14 @@ func (r *GetUserInfoInnerHandler) MakeLocalEndpoint(svc GetUserInfoInnerService)
 		spew.Dump(ctx)
 
 		//
-		in := request.(*GetUserInfoInnerRequest)
+		in := request.(*GetUserInfoInnerIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
 func (r *GetUserInfoInnerHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(GetUserInfoInnerRequest), ctx, req)
+	return r.base.DecodeRequest(new(GetUserInfoInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改

@@ -18,16 +18,16 @@ const (
 
 type (
 	GetGroupMembersInnerService interface {
-		Exec(in *GetGroupMembersInnerRequest) ([]*GetGroupMembersInnerResponse, error)
+		Exec(in *GetGroupMembersInnerIn) ([]*GetGroupMembersInnerOut, error)
 	}
 
 	//input data
-	GetGroupMembersInnerRequest struct {
+	GetGroupMembersInnerIn struct {
 		GID int64 `json:"gid,omitempty"`
 	}
 
 	//output data
-	GetGroupMembersInnerResponse struct {
+	GetGroupMembersInnerOut struct {
 		UID int64 `json:"uid,omitempty"`
 		//冗余字段，提升性能,用户帐号
 		UserCodeRef string `json:"user_code_ref,omitempty"`
@@ -48,19 +48,19 @@ func (r *GetGroupMembersInnerHandler) MakeLocalEndpoint(svc GetGroupMembersInner
 		fmt.Println("#############  GetGroupMembersInner ###########")
 		spew.Dump(ctx)
 
-		in := request.(*GetGroupMembersInnerRequest)
+		in := request.(*GetGroupMembersInnerIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
 func (r *GetGroupMembersInnerHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(GetGroupMembersInnerRequest), ctx, req)
+	return r.base.DecodeRequest(new(GetGroupMembersInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改
 func (r *GetGroupMembersInnerHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
-	var response []*GetGroupMembersInnerResponse
+	var response []*GetGroupMembersInnerOut
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
 	}

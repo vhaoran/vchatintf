@@ -22,11 +22,11 @@ const (
 
 type (
 	GetBulletinInfoInnerService interface {
-		Exec(in *GetBulletinInfoInnerRequest) (*refuser.BulletinInfoRef, error)
+		Exec(in *GetBulletinInfoInnerIn) (*refuser.BulletinInfoRef, error)
 	}
 
 	//input data
-	GetBulletinInfoInnerRequest struct {
+	GetBulletinInfoInnerIn struct {
 		BID int64 `json:"bid,omitempty"`
 	}
 
@@ -48,14 +48,14 @@ func (r *GetBulletinInfoInnerHandler) MakeLocalEndpoint(svc GetBulletinInfoInner
 		fmt.Println("#############  GetBulletinInfoRef ###########")
 		spew.Dump(ctx)
 
-		in := request.(*GetBulletinInfoInnerRequest)
+		in := request.(*GetBulletinInfoInnerIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
 func (r *GetBulletinInfoInnerHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(GetBulletinInfoInnerRequest), ctx, req)
+	return r.base.DecodeRequest(new(GetBulletinInfoInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改

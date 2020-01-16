@@ -21,12 +21,12 @@ const (
 type (
 	LoginService interface {
 		//todo
-		Exec(in *LoginRequest) (*ykit.Result, error)
+		Exec(in *LoginIn) (*ykit.Result, error)
 	}
 
 	//input data
 	//todo
-	LoginRequest struct {
+	LoginIn struct {
 		UserCode string `json:"user_code"`
 		//是否是手机号登录（为真值时，userCode代表手机号）
 		IsMobile   bool   `json:"is_mobile,omitempty"`
@@ -54,14 +54,14 @@ func (r *LoginHandler) MakeLocalEndpoint(svc LoginService) endpoint.Endpoint {
 		spew.Dump(ctx)
 
 		//todo
-		in := request.(*LoginRequest)
+		in := request.(*LoginIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
 func (r *LoginHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(LoginRequest), ctx, req)
+	return r.base.DecodeRequest(new(LoginIn), ctx, req)
 }
 
 //个人实现,参数不能修改

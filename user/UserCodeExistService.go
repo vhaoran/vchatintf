@@ -22,12 +22,12 @@ const (
 type (
 	UserCodeExistService interface {
 		//todo
-		Exec(in *UserCodeExistRequest) (*ykit.Result, error)
+		Exec(in *UserCodeExistIn) (*ykit.Result, error)
 	}
 
 	//input data
 	//todo
-	UserCodeExistRequest struct {
+	UserCodeExistIn struct {
 		UserCode string `json:"user_code,omitempty"`
 	}
 
@@ -50,14 +50,14 @@ func (r *UserCodeExistHandler) MakeLocalEndpoint(svc UserCodeExistService) endpo
 		spew.Dump(ctx)
 
 		//todo
-		in := request.(*UserCodeExistRequest)
+		in := request.(*UserCodeExistIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
 func (r *UserCodeExistHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(UserCodeExistRequest), ctx, req)
+	return r.base.DecodeRequest(new(UserCodeExistIn), ctx, req)
 }
 
 //个人实现,参数不能修改

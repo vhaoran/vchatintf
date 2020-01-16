@@ -19,16 +19,16 @@ const (
 //获取用户所有好友
 type (
 	GetUserFriendsInnerService interface {
-		Exec(in *GetUserFriendsInnerRequest) ([]*GetUserFriendsInnerResponse, error)
+		Exec(in *GetUserFriendsInnerIn) ([]*GetUserFriendsInnerOut, error)
 	}
 
 	//input data
-	GetUserFriendsInnerRequest struct {
+	GetUserFriendsInnerIn struct {
 		UID int64 `json:"uid,omitempty"`
 	}
 
 	//output data
-	GetUserFriendsInnerResponse struct {
+	GetUserFriendsInnerOut struct {
 		FriendID    int64  `json:"friend_id,omitempty" gorm:"unique_index:uf_uk_uid_friend_id;"`
 		UserCodeRef string `json:"user_code_ref,omitempty" gorm:"size:50"`
 		//冗余字段，提升性能,眤称
@@ -48,19 +48,19 @@ func (r *GetUserFriendsInnerHandler) MakeLocalEndpoint(svc GetUserFriendsInnerSe
 		fmt.Println("#############  GetUserFriendsInner ###########")
 		spew.Dump(ctx)
 
-		in := request.(*GetUserFriendsInnerRequest)
+		in := request.(*GetUserFriendsInnerIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
 func (r *GetUserFriendsInnerHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(GetUserFriendsInnerRequest), ctx, req)
+	return r.base.DecodeRequest(new(GetUserFriendsInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改
 func (r *GetUserFriendsInnerHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
-	var response []*GetUserFriendsInnerResponse
+	var response []*GetUserFriendsInnerOut
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
 	}

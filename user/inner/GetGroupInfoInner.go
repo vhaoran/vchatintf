@@ -26,12 +26,12 @@ const (
 type (
 	GetGroupInfoInnerService interface {
 		//
-		Exec(in *GetGroupInfoInnerRequest) (*refuser.GroupInfoRef, error)
+		Exec(in *GetGroupInfoInnerIn) (*refuser.GroupInfoRef, error)
 	}
 
 	//input data
 	//
-	GetGroupInfoInnerRequest struct {
+	GetGroupInfoInnerIn struct {
 		GID int64 `json:"gid,omitempty"`
 	}
 
@@ -54,14 +54,14 @@ func (r *GetGroupInfoInnerHandler) MakeLocalEndpoint(svc GetGroupInfoInnerServic
 		spew.Dump(ctx)
 
 		//
-		in := request.(*GetGroupInfoInnerRequest)
+		in := request.(*GetGroupInfoInnerIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
 func (r *GetGroupInfoInnerHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(GetGroupInfoInnerRequest), ctx, req)
+	return r.base.DecodeRequest(new(GetGroupInfoInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改

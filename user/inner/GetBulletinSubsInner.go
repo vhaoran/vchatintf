@@ -18,16 +18,16 @@ const (
 
 type (
 	GetBulletinSubsInnerService interface {
-		Exec(in *GetBulletinSubsInnerRequest) ([]*GetBulletinSubsInnerResponse, error)
+		Exec(in *GetBulletinSubsInnerIn) ([]*GetBulletinSubsInnerOut, error)
 	}
 
 	//input data
-	GetBulletinSubsInnerRequest struct {
+	GetBulletinSubsInnerIn struct {
 		BID int64 `json:"bid,omitempty"`
 	}
 
 	//output data
-	GetBulletinSubsInnerResponse struct {
+	GetBulletinSubsInnerOut struct {
 		UID int64 `json:"uid,omitempty"`
 		//冗余字段，提升性能,用户帐号
 		UserCodeRef string `json:"user_code_ref,omitempty"`
@@ -48,19 +48,19 @@ func (r *GetBulletinSubsInnerHandler) MakeLocalEndpoint(svc GetBulletinSubsInner
 		ylog.Debug("#############  GetBulletinSubsInner ###########")
 		spew.Dump(ctx)
 
-		in := request.(*GetBulletinSubsInnerRequest)
+		in := request.(*GetBulletinSubsInnerIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
 func (r *GetBulletinSubsInnerHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(GetBulletinSubsInnerRequest), ctx, req)
+	return r.base.DecodeRequest(new(GetBulletinSubsInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改
 func (r *GetBulletinSubsInnerHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
-	var response []*GetBulletinSubsInnerResponse
+	var response []*GetBulletinSubsInnerOut
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
 	}

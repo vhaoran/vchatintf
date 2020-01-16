@@ -22,12 +22,12 @@ const (
 type (
 	RegUserService interface {
 		//todo
-		Exec(in *RegUserRequest) (*ykit.Result, error)
+		Exec(in *RegUserIn) (*ykit.Result, error)
 	}
 
 	//input data
 	//todo
-	RegUserRequest struct {
+	RegUserIn struct {
 		UserCode   string `json:"user_code"`
 		Mobile     string `json:"mobile omitempty"`
 		Pwd        string `json:"pwd omitempty"`
@@ -54,14 +54,14 @@ func (r *RegUserHandler) MakeLocalEndpoint(svc RegUserService) endpoint.Endpoint
 		spew.Dump(ctx)
 
 		//todo
-		in := request.(*RegUserRequest)
+		in := request.(*RegUserIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
 func (r *RegUserHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(RegUserRequest), ctx, req)
+	return r.base.DecodeRequest(new(RegUserIn), ctx, req)
 }
 
 //个人实现,参数不能修改
