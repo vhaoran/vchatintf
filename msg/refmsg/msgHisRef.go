@@ -15,17 +15,20 @@ type MsgHisRef struct {
 	MsgType int `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
 
 	//发送方id
-	FromUID int64 `json:"from_uid,omitempty"   bson:"from_uid,omitempty"`
+	FromUID         int64  `json:"from_uid,omitempty"   bson:"from_uid,omitempty"`
+	FromUserCodeRef string `json:"from_user_code,omitempty"   bson:"from_user_code,omitempty"`
+	FromNickRef     string `json:"from_nick,omitempty"   bson:"from_nick,omitempty"`
+	FromIconRef     string `json:"from_icon,omitempty"   bson:"from_icon,omitempty"`
 
 	//目标用户ID
 	ToUID         int64  `json:"to_uid,omitempty"   bson:"to_uid,omitempty"`
-	ToUserCodeRef string `json:"to_user_code_ref,omitempty"   bson:"to_user_code_ref,omitempty"`
-	ToNickRef     string `json:"to_nic_ref,omitempty"   bson:"to_nic_ref,omitempty"`
-	ToIconRef     string `json:"to_icon_ref,omitempty"   bson:"to_icon_ref,omitempty"`
+	ToUserCodeRef string `json:"to_user_code,omitempty"   bson:"to_user_code,omitempty"`
+	ToNickRef     string `json:"to_nick,omitempty"   bson:"to_nick,omitempty"`
+	ToIconRef     string `json:"to_icon,omitempty"   bson:"to_icon,omitempty"`
 
-	ToGID      int64 `json:"to_gid,omitempty"   bson:"to_gid,omitempty"`
-	ToGNameRef string `json:"to_gname_ref,omitempty"   bson:"to_gname_ref,omitempty"`
-	ToGIconRef string `json:"to_gicon_ref,omitempty"   bson:"to_gicon_ref,omitempty"`
+	ToGID      int64  `json:"to_gid,omitempty"   bson:"to_gid,omitempty"`
+	ToGNameRef string `json:"to_gname,omitempty"   bson:"to_gname,omitempty"`
+	ToGIconRef string `json:"to_gicon,omitempty"   bson:"to_gicon,omitempty"`
 	//自定义的消息内容类型，可选
 	BodyType int `json:"body_type,omitempty"   bson:"body_type,omitempty"`
 

@@ -27,4 +27,3 @@ type BulletinContentRef struct {
 	// 页脚
 	Footer interface{} `json:"footer,omitempty"   bson:"footer,omitempty"`
 }
-

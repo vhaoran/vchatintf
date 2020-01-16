@@ -11,9 +11,9 @@ type CircleRef struct {
 	CreatedAt ytime.Date `json:"created_at,omitempty"   bson:"created_at,omitempty"`
 
 	UID         int64  `json:"uid,omitempty"   bson:"uid,omitempty"`
-	UserCodeRef string `json:"user_code_ref,omitempty"   bson:"user_code_ref,omitempty"`
-	NickRef     string `json:"nick_ref,omitempty"   bson:"nick_ref,omitempty"`
-	IconRef     string `json:"icon_ref,omitempty"   bson:"icon_ref,omitempty"`
+	UserCodeRef string `json:"user_code ,omitempty"   bson:"user_code ,omitempty"`
+	NickRef     string `json:"nick ,omitempty"   bson:"nick ,omitempty"`
+	IconRef     string `json:"icon ,omitempty"   bson:"icon ,omitempty"`
 
 	Content interface{} `json:"content,omitempty"   bson:"content,omitempty"`
 	//回复及点赞
