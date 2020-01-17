@@ -12,7 +12,7 @@ type MsgHisRef struct {
 	//1：群消息
 	//2：朋友圈消息
 	//3：系统消息(如某用户资料变更)
-	MsgType int `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
+	MsgType MsgType `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
 
 	//发送方id
 	FromUID         int64  `json:"from_uid,omitempty"   bson:"from_uid,omitempty"`

@@ -13,6 +13,8 @@ import (
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+
+	"github.com/vhaoran/vchatintf/msg/refmsg"
 )
 
 const (
@@ -29,7 +31,7 @@ type (
 	//input data
 	//todo
 	AckMsgIn struct {
-		MsgType MsgType            `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
+		MsgType refmsg.MsgType     `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
 		MsgID   primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
 	}
 
