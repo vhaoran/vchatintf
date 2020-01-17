@@ -33,6 +33,7 @@ type (
 	AckMsgIn struct {
 		MsgType refmsg.MsgType     `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
 		MsgID   primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
+		UIDList []int64            `json:"uid_list,omitempty"`
 	}
 
 	//output data
