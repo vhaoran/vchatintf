@@ -28,22 +28,17 @@ type (
 	//input data
 	//todo
 	SendMsgIn struct {
+		//发送后，是否显示传入的内容。
+		SendBack bool `json:"send_back,omitempty"`
+		MsgType  int  `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
+
+		//发送方id
 		FromUID int64 `json:"from_uid,omitempty"   bson:"from_uid,omitempty"`
 
-		//0: 私信消息
-		//1：群消息
-		//2：朋友圈消息
-		//3：系统消息(如某用户资料变更)
-		MsgType int `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
-
 		//目标用户ID
-		ToUID       int64  `json:"to_uid,omitempty"   bson:"to_uid,omitempty"`
-		UserCodeRef string `json:"user_code_ref,omitempty"   bson:"user_code_ref,omitempty"`
-		NickRef     string `json:"nick_ref,omitempty"   bson:"nick_ref,omitempty"`
-		IconRef     string `json:"icon_ref,omitempty"   bson:"icon_ref,omitempty"`
-		ToBID       int64  `json:"to_bid,omitempty"   bson:"to_bid,omitempty"`
-		BNameRef    string `json:"bname_ref,omitempty"   bson:"bname_ref,omitempty"`
-		BIconRef    string `json:"bicon_ref,omitempty"   bson:"bicon_ref,omitempty"`
+		ToUID int64 `json:"to_uid,omitempty"   bson:"to_uid,omitempty"`
+
+		ToGID int64 `json:"to_gid,omitempty"   bson:"to_gid,omitempty"`
 		//自定义的消息内容类型，可选
 		BodyType int `json:"body_type,omitempty"   bson:"body_type,omitempty"`
 

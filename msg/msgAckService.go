@@ -21,7 +21,7 @@ const (
 )
 
 type (
-	 MsgAckService interface {
+	MsgAckService interface {
 		//todo
 		Exec(in *AckMsgIn) (*ykit.Result, error)
 	}
@@ -29,7 +29,8 @@ type (
 	//input data
 	//todo
 	AckMsgIn struct {
-		MsgID primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
+		MsgType MsgType            `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
+		MsgID   primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
 	}
 
 	//output data
