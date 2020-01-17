@@ -12,4 +12,12 @@ type GroupInfoRef struct {
 	OwnerID int64 `json:"owner_id,omitempty" gorm:"index"`
 	//群人數
 	GMemberCount int64 `json:"g_member_count,omitempty"`
+	//全局禁言
+	NoSpeak bool
+	//允许互加好友
+	ExchangeInfo bool
+	//允许拉人入群
+	Recommend bool
+	//入群确认
+	JoinConfirm bool
 }
