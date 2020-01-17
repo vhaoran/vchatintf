@@ -29,8 +29,8 @@ type (
 	//todo
 	SendMsgIn struct {
 		//发送后，是否显示传入的内容。
-		SendBack bool `json:"send_back,omitempty"`
-		MsgType  int  `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
+		SendBack bool    `json:"send_back,omitempty"`
+		MsgType  MsgType `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
 
 		//发送方id
 		FromUID int64 `json:"from_uid,omitempty"   bson:"from_uid,omitempty"`
