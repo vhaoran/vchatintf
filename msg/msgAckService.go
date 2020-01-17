@@ -28,12 +28,16 @@ type (
 		Exec(in *AckMsgIn) (*ykit.Result, error)
 	}
 
+	AckMsgIDType struct {
+		MsgType refmsg.MsgType     `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
+		MsgID   primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
+	}
+
 	//input data
 	//todo
 	AckMsgIn struct {
-		MsgType refmsg.MsgType     `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
-		MsgID   primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
-		UIDList []int64            `json:"uid_list,omitempty"`
+		UID    int64          `json:"uid"`
+		MsgIDs []AckMsgIDType `json:"msg_ids,omitempty"`
 	}
 
 	//output data
