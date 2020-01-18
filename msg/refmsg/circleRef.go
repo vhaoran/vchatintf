@@ -17,8 +17,8 @@ type CircleRef struct {
 
 	Content interface{} `json:"content,omitempty"   bson:"content,omitempty"`
 	//回复及点赞
-	Prize []CirclePrizeRef `json:"prize,omitempty"   bson:"prize,omitempty"`
-	Reply []CircleReplyRef `json:"reply,omitempty"   bson:"reply,omitempty"`
+	Prize []CirclePrizeRef   `json:"prize,omitempty"   bson:"prize,omitempty"`
+	Reply []CircleCommentRef `json:"reply,omitempty"   bson:"reply,omitempty"`
 }
 
 type CirclePrizeRef struct {
