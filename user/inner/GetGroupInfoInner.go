@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sync"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kit/kit/endpoint"
@@ -115,4 +116,25 @@ func (r *GetGroupInfoInnerHandler) ProxySD() endpoint.Endpoint {
 		GetGroupInfoInner_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
+}
+
+//只用于内部的其它微服务调用 ，不从网关层调用
+var once_GetGroupInfoInner sync.Once
+var local_GetGroupInfoInner_EP endpoint.Endpoint
+
+//
+func (r *GetGroupInfoInnerHandler) Call(in GetGroupInfoInnerIn) (*refuser.GroupInfoRef, error) {
+	once_GetGroupInfoInner.Do(func() {
+		local_GetGroupInfoInner_EP = new(GetGroupInfoInnerHandler).ProxySD()
+	})
+	//
+	ep := local_GetGroupInfoInner_EP
+	//
+	result, err := ep(context.Background(), in)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result.(*refuser.GroupInfoRef), nil
 }

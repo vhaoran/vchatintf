@@ -1,0 +1,21 @@
+//只用于内部调用 ，不从风头调用
+var once_$name$ sync.Once
+var local_$name$_EP endpoint.Endpoint
+
+
+func (r *$name$Handler) Call(in $name$In) (*$name$Out, error) {
+	once_$name$.Do(func() {
+		local_$name$_EP = new($name$Handler).ProxySD()
+	})
+	//
+	ep := local_$name$_EP
+	//
+	result, err := ep(context.Background(), in)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result.(*$name$Out), nil
+}
+
