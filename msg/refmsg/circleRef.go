@@ -31,9 +31,10 @@ type CirclePrizeRef struct {
 	IconRef     string `json:"icon ,omitempty"   bson:"icon ,omitempty"`
 }
 
-type CircleReplyRef struct {
+type CircleCommentRef struct {
 	CreatedAt ytime.Date `json:"created_at,omitempty"   bson:"created_at,omitempty"`
 
+	//评论人
 	OfUID int64 `json:"Of_uid,omitempty"   bson:"Of_uid,omitempty"`
 
 	UserCodeRef string `json:"user_code ,omitempty"   bson:"user_code ,omitempty"`
