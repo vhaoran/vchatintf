@@ -106,3 +106,4 @@ func (r *RegUserHandler) HandlerSD(mid []endpoint.Middleware,
 		mid,
 		options...)
 }
+

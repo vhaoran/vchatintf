@@ -1,4 +1,4 @@
-//只用于内部调用 ，不从风头调用
+//只用于内部调用 ，不从gate调用
 var once_$name$ sync.Once
 var local_$name$_EP endpoint.Endpoint
 
