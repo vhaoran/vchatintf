@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sync"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kit/kit/endpoint"
@@ -17,7 +18,7 @@ import (
 )
 
 const (
-	GetBulletinInfoInner_HANDLER_PATH = "/GetBulletinInfoRef"
+	GetBulletinInfoInner_HANDLER_PATH = "/GetBulletinInfoInner"
 )
 
 type (
@@ -118,4 +119,24 @@ func (r *GetBulletinInfoInnerHandler) ProxySD() endpoint.Endpoint {
 		GetBulletinInfoInner_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
+}
+
+//只用于内部调用 ，不从风头调用
+var once_GetBulletinInfoInner sync.Once
+var local_GetBulletinInfoInner_EP endpoint.Endpoint
+
+func (r *GetBulletinInfoInnerHandler) Call(in *GetBulletinInfoInnerIn) (*refuser.BulletinInfoRef, error) {
+	once_GetBulletinInfoInner.Do(func() {
+		local_GetBulletinInfoInner_EP = new(GetBulletinInfoInnerHandler).ProxySD()
+	})
+	//
+	ep := local_GetBulletinInfoInner_EP
+	//
+	result, err := ep(context.Background(), in)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result.(*refuser.BulletinInfoRef), nil
 }

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sync"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kit/kit/endpoint"
@@ -108,4 +109,24 @@ func (r *GetGroupMembersInnerHandler) ProxySD() endpoint.Endpoint {
 		GetGroupMembersInner_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
+}
+
+//只用于内部调用 ，不从风头调用
+var once_GetGroupMembersInner sync.Once
+var local_GetGroupMembersInner_EP endpoint.Endpoint
+
+func (r *GetGroupMembersInnerHandler) Call(in *GetGroupMembersInnerIn) ([]*GetGroupMembersInnerOut, error) {
+	once_GetGroupMembersInner.Do(func() {
+		local_GetGroupMembersInner_EP = new(GetGroupMembersInnerHandler).ProxySD()
+	})
+	//
+	ep := local_GetGroupMembersInner_EP
+	//
+	result, err := ep(context.Background(), in)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result.([]*GetGroupMembersInnerOut), nil
 }
