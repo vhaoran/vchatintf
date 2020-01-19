@@ -122,7 +122,7 @@ func (r *GetUserInfoInnerHandler) ProxySD() endpoint.Endpoint {
 var once_GetUserInfoInner sync.Once
 var local_GetUserInfoInner_EP endpoint.Endpoint
 
-func (r *GetUserInfoInnerHandler) Call(in GetUserInfoInnerIn) (*refuser.UserInfoRef, error) {
+func (r *GetUserInfoInnerHandler) Call(in *GetUserInfoInnerIn) (*refuser.UserInfoRef, error) {
 	once_GetUserInfoInner.Do(func() {
 		local_GetUserInfoInner_EP = new(GetUserInfoInnerHandler).ProxySD()
 	})
