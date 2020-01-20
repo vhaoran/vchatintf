@@ -6,27 +6,27 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
-	"sync"
-
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
+	"github.com/vhaoran/vchat/lib/ylog"
+	"net/http"
 )
 
 const (
-	TriggerOffLine_HANDLER_PATH = "/TriggerOffLine"
+	Hello_HANDLER_PATH = "/Hello"
 )
 
 type (
-	TriggerOffLineService interface {
-		Exec(in *TriggerOffLineIn) (*ykit.Result, error)
+	HelloService interface {
+		Exec(in *HelloIn) (*ykit.Result, error)
 	}
 
 	//input data
-	TriggerOffLineIn struct {
-		UID int64 `json:"uid omitempty"`
+	HelloIn struct {
+		UID int64  `json:"uid omitempty"`
+		S   string `json:"s"`
 	}
 
 	//output data
@@ -37,28 +37,31 @@ type (
 	//}
 
 	// handler implements
-	TriggerOffLineHandler struct {
+	HelloHandler struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *TriggerOffLineHandler) MakeLocalEndpoint(svc TriggerOffLineService) endpoint.Endpoint {
+func (r *HelloHandler) MakeLocalEndpoint(svc HelloService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  TriggerOffLine ###########")
+		fmt.Println("#############  Hello ###########")
 		spew.Dump(ctx)
 
-		in := request.(*TriggerOffLineIn)
+		in := request.(*HelloIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *TriggerOffLineHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(TriggerOffLineIn), ctx, req)
+func (r *HelloHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	ylog.Debug(" #### enter DecodeRequest ")
+	ylog.DebugDump("ctx:", ctx)
+
+	return r.base.DecodeRequest(new(HelloIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *TriggerOffLineHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *HelloHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -67,9 +70,23 @@ func (r *TriggerOffLineHandler) DecodeResponse(_ context.Context, res *http.Resp
 }
 
 //handler for router，微服务本地接口，
-func (r *TriggerOffLineHandler) HandlerLocal(service TriggerOffLineService,
+func (r *HelloHandler) HandlerLocal(service HelloService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
+
+	// 访问 request内容,丁当于Java中的拦截器
+	before := tran.ServerBefore(func(ctx context.Context, req *http.Request) context.Context {
+		uid := req.Header.Get("uid")
+		if len(uid) == 0 {
+			uid = "123"
+		}
+
+		fmt.Println("------------before host:", req.Host)
+		return context.WithValue(ctx, "uid", uid)
+	})
+	l := make([]tran.ServerOption, 0)
+	l = append(l, before)
+	l = append(l, options...)
 
 	ep := r.MakeLocalEndpoint(service)
 	for _, f := range mid {
@@ -80,51 +97,31 @@ func (r *TriggerOffLineHandler) HandlerLocal(service TriggerOffLineService,
 		ep,
 		r.DecodeRequest,
 		r.base.EncodeResponse,
-		options...)
+		l...)
 	//handler = loggingMiddleware()
 	return handler
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *TriggerOffLineHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *HelloHandler) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		TriggerOffLine_HANDLER_PATH,
+		Hello_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *TriggerOffLineHandler) ProxySD() endpoint.Endpoint {
+func (r *HelloHandler) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		TriggerOffLine_HANDLER_PATH,
+		Hello_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
-}
-
-//只用于内部调用 ，不从风头调用
-var once_TriggerOffLine sync.Once
-var local_TriggerOffLine_EP endpoint.Endpoint
-
-func (r *TriggerOffLineHandler) Call(in TriggerOffLineIn) (*ykit.Result, error) {
-	once_TriggerOffLine.Do(func() {
-		local_TriggerOffLine_EP = new(TriggerOffLineHandler).ProxySD()
-	})
-	//
-	ep := local_TriggerOffLine_EP
-	//
-	result, err := ep(context.Background(), in)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return result.(*ykit.Result), nil
 }

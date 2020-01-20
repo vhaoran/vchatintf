@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 
 	"github.com/davecgh/go-spew/spew"
@@ -28,7 +29,11 @@ type (
 	//input data
 	//todo
 	CirclePrizeIn struct {
-		S string `json:"s"`
+		//0 prize 1 comment
+		Action int                `json:"action omitempty"`
+		ID     primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
+		Text   string             `json:"text omitempty"`
+		UID    int64              `json:"uid,omitempty"   bson:"uid,omitempty"`
 	}
 
 	//output data
