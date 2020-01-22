@@ -2,30 +2,33 @@ package msg
 
 //for snippet用于标准返回值的微服务接口
 
+//for snippet用于标准返回值的微服务接口
+
 import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
-
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
+	"github.com/vhaoran/vchat/common/ytime"
 	"github.com/vhaoran/vchat/lib/ykit"
+	"net/http"
 )
 
 const (
-	CirclePublish_HANDLER_PATH = "/CirclePublish"
+	TriggerOnLine_HANDLER_PATH = "/TriggerOnLine"
 )
 
 type (
-	CirclePublishService interface {
-		Exec(in *CirclePublishIn) (*ykit.Result, error)
+	TriggerOnLineService interface {
+		Exec(in *TriggerOnLineIn) (*ykit.Result, error)
 	}
 
 	//input data
-	CirclePublishIn struct {
-		S string `json:"s"`
+	TriggerOnLineIn struct {
+		UID         int64      `json:"uid omitempty"`
+		LastAckTime ytime.Date `json:"last_ack_time omitempty"`
 	}
 
 	//output data
@@ -36,28 +39,28 @@ type (
 	//}
 
 	// handler implements
-	CirclePublishHandler struct {
+	TriggerOnLineHandler struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *CirclePublishHandler) MakeLocalEndpoint(svc CirclePublishService) endpoint.Endpoint {
+func (r *TriggerOnLineHandler) MakeLocalEndpoint(svc TriggerOnLineService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  CirclePublish ###########")
+		fmt.Println("#############  TriggerOnLine ###########")
 		spew.Dump(ctx)
 
-		in := request.(*CirclePublishIn)
+		in := request.(*TriggerOnLineIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *CirclePublishHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(CirclePublishIn), ctx, req)
+func (r *TriggerOnLineHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(TriggerOnLineIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *CirclePublishHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *TriggerOnLineHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -66,7 +69,7 @@ func (r *CirclePublishHandler) DecodeResponse(_ context.Context, res *http.Respo
 }
 
 //handler for router，微服务本地接口，
-func (r *CirclePublishHandler) HandlerLocal(service CirclePublishService,
+func (r *TriggerOnLineHandler) HandlerLocal(service TriggerOnLineService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -85,15 +88,25 @@ func (r *CirclePublishHandler) HandlerLocal(service CirclePublishService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *CirclePublishHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *TriggerOnLineHandler) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		CirclePublish_HANDLER_PATH,
+		TriggerOnLine_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
+}
+
+func (r *TriggerOnLineHandler) ProxySD() endpoint.Endpoint {
+	return r.base.ProxyEndpointSD(
+		context.Background(),
+		MSTAG,
+		"POST",
+		TriggerOnLine_HANDLER_PATH,
+		r.DecodeRequest,
+		r.DecodeResponse)
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"sync"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kit/kit/endpoint"
@@ -108,4 +109,24 @@ func (r *GetBulletinSubsInnerHandler) ProxySD() endpoint.Endpoint {
 		GetBulletinSubsInner_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
+}
+
+//只用于内部调用 ，不从风头调用
+var once_GetBulletinSubsInner sync.Once
+var local_GetBulletinSubsInner_EP endpoint.Endpoint
+
+func (r *GetBulletinSubsInnerHandler) Call(in *GetBulletinSubsInnerIn) ([]*GetBulletinSubsInnerOut, error) {
+	once_GetBulletinSubsInner.Do(func() {
+		local_GetBulletinSubsInner_EP = new(GetBulletinSubsInnerHandler).ProxySD()
+	})
+	//
+	ep := local_GetBulletinSubsInner_EP
+	//
+	result, err := ep(context.Background(), in)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result.([]*GetBulletinSubsInnerOut), nil
 }

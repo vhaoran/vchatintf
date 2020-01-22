@@ -10,7 +10,12 @@ type BulletinContentRef struct {
 	CreatedAt ytime.Date         `json:"created_at,omitempty"   bson:"created_at,omitempty"`
 
 	// 公众号id
-	BID int64 `json:"bid,omitempty"   bson:"bid,omitempty"`
+	BID   int64  `json:"bid,omitempty"   bson:"bid,omitempty"`
+	BName string `json:"b_name,omitempty"   bson:"b_name,omitempty"`
+
+	//图标
+	BIcon string `json:"b_icon,omitempty"   bson:"b_icon,omitempty"`
+
 	// 页眉 可以是有格式内容
 	Header interface{} `json:"header,omitempty"   bson:"header,omitempty"`
 
@@ -26,4 +31,6 @@ type BulletinContentRef struct {
 	Reply interface{} `json:"reply,omitempty"   bson:"reply,omitempty"`
 	// 页脚
 	Footer interface{} `json:"footer,omitempty"   bson:"footer,omitempty"`
+	//total push count
+	TotalPushCount int64 `json:"total_push_count,omitempty"   bson:"total_push_count,omitempty"`
 }

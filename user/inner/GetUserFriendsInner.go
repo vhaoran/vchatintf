@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sync"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kit/kit/endpoint"
@@ -108,4 +109,24 @@ func (r *GetUserFriendsInnerHandler) ProxySD() endpoint.Endpoint {
 		GetUserFriendsInner_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
+}
+
+//只用于内部调用 ，不从风头调用
+var once_GetUserFriendsInner sync.Once
+var local_GetUserFriendsInner_EP endpoint.Endpoint
+
+func (r *GetUserFriendsInnerHandler) Call(in *GetUserFriendsInnerIn) ([]*GetUserFriendsInnerOut, error) {
+	once_GetUserFriendsInner.Do(func() {
+		local_GetUserFriendsInner_EP = new(GetUserFriendsInnerHandler).ProxySD()
+	})
+	//
+	ep := local_GetUserFriendsInner_EP
+	//
+	result, err := ep(context.Background(), in)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result.([]*GetUserFriendsInnerOut), nil
 }

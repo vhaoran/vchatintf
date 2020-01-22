@@ -6,30 +6,34 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
-	"github.com/vhaoran/vchat/common/ypage"
 	"github.com/vhaoran/vchat/lib/ykit"
 )
 
 const (
 	//todo
-	PageMsgHis_HANDLER_PATH = "/PageMsgHis"
+	CirclePrize_HANDLER_PATH = "/CirclePrize"
 )
 
 type (
-	MsgHisPageService interface {
+	CirclePrizeService interface {
 		//todo
-		Exec(in *PageMsgHisIn) (*ykit.Result, error)
+		Exec(in *CirclePrizeIn) (*ykit.Result, error)
 	}
 
 	//input data
 	//todo
-	PageMsgHisIn struct {
-		ypage.PageBean
+	CirclePrizeIn struct {
+		//0 prize 1 comment
+		Action int                `json:"action omitempty"`
+		ID     primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
+		Text   string             `json:"text omitempty"`
+		UID    int64              `json:"uid,omitempty"   bson:"uid,omitempty"`
 	}
 
 	//output data
@@ -40,29 +44,29 @@ type (
 	//}
 
 	// handler implements
-	PageMsgHisHandler struct {
+	CirclePrizeHandler struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *PageMsgHisHandler) MakeLocalEndpoint(svc MsgHisPageService) endpoint.Endpoint {
+func (r *CirclePrizeHandler) MakeLocalEndpoint(svc CirclePrizeService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  PageMsgHis ###########")
+		fmt.Println("#############  CirclePrize ###########")
 		spew.Dump(ctx)
 
 		//todo
-		in := request.(*PageMsgHisIn)
+		in := request.(*CirclePrizeIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *PageMsgHisHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(PageMsgHisIn), ctx, req)
+func (r *CirclePrizeHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(CirclePrizeIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *PageMsgHisHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *CirclePrizeHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -71,7 +75,7 @@ func (r *PageMsgHisHandler) DecodeResponse(_ context.Context, res *http.Response
 }
 
 //handler for router，微服务本地接口，
-func (r *PageMsgHisHandler) HandlerLocal(service MsgHisPageService,
+func (r *CirclePrizeHandler) HandlerLocal(service CirclePrizeService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -90,14 +94,14 @@ func (r *PageMsgHisHandler) HandlerLocal(service MsgHisPageService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *PageMsgHisHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *CirclePrizeHandler) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		//todo
 		"POST",
-		PageMsgHis_HANDLER_PATH,
+		CirclePrize_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,

@@ -123,7 +123,7 @@ var once_GetGroupInfoInner sync.Once
 var local_GetGroupInfoInner_EP endpoint.Endpoint
 
 //
-func (r *GetGroupInfoInnerHandler) Call(in GetGroupInfoInnerIn) (*refuser.GroupInfoRef, error) {
+func (r *GetGroupInfoInnerHandler) Call(in *GetGroupInfoInnerIn) (*refuser.GroupInfoRef, error) {
 	once_GetGroupInfoInner.Do(func() {
 		local_GetGroupInfoInner_EP = new(GetGroupInfoInnerHandler).ProxySD()
 	})

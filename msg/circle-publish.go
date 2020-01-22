@@ -1,4 +1,4 @@
-package intf
+package msg
 
 //for snippet用于标准返回值的微服务接口
 
@@ -15,24 +15,18 @@ import (
 )
 
 const (
-	//todo
-	RegUser_HANDLER_PATH = "/RegUser"
+	CirclePublish_HANDLER_PATH = "/CirclePublish"
 )
 
 type (
-	RegUserService interface {
-		//todo
-		Exec(in *RegUserIn) (*ykit.Result, error)
+	CirclePublishService interface {
+		Exec(in *CirclePublishIn) (*ykit.Result, error)
 	}
 
 	//input data
-	//todo
-	RegUserIn struct {
-		UserCode   string `json:"user_code"`
-		Mobile     string `json:"mobile omitempty"`
-		Pwd        string `json:"pwd omitempty"`
-		ChartKey   string `json:"chart_key omitempty"`
-		ChartValue string `json:"chart_value omitempty"`
+	CirclePublishIn struct {
+		UID  int64  `json:"uid omitempty"`
+		Text string `json:"text"`
 	}
 
 	//output data
@@ -43,29 +37,28 @@ type (
 	//}
 
 	// handler implements
-	RegUserHandler struct {
+	CirclePublishHandler struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *RegUserHandler) MakeLocalEndpoint(svc RegUserService) endpoint.Endpoint {
+func (r *CirclePublishHandler) MakeLocalEndpoint(svc CirclePublishService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  RegUser ###########")
+		fmt.Println("#############  CirclePublish ###########")
 		spew.Dump(ctx)
 
-		//todo
-		in := request.(*RegUserIn)
+		in := request.(*CirclePublishIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *RegUserHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(RegUserIn), ctx, req)
+func (r *CirclePublishHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(CirclePublishIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *RegUserHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *CirclePublishHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -74,7 +67,7 @@ func (r *RegUserHandler) DecodeResponse(_ context.Context, res *http.Response) (
 }
 
 //handler for router，微服务本地接口，
-func (r *RegUserHandler) HandlerLocal(service RegUserService,
+func (r *CirclePublishHandler) HandlerLocal(service CirclePublishService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -93,17 +86,15 @@ func (r *RegUserHandler) HandlerLocal(service RegUserService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *RegUserHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *CirclePublishHandler) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
-		//todo
 		"POST",
-		RegUser_HANDLER_PATH,
+		CirclePublish_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
-
