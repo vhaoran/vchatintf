@@ -19,7 +19,7 @@ const (
 
 type (
 	OnLineNotifyService interface {
-		Exec(in *OnLineNotifyIn) (*ykit.Result, error)
+		Exec(ctx context.Context,in *OnLineNotifyIn) (*ykit.Result, error)
 	}
 
 	//input data
@@ -46,7 +46,7 @@ func (r *OnLineNotifyHandler) MakeLocalEndpoint(svc OnLineNotifyService) endpoin
 		spew.Dump(ctx)
 
 		in := request.(*OnLineNotifyIn)
-		return svc.Exec(in)
+		return svc.Exec(ctx,in)
 	}
 }
 
