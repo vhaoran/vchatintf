@@ -6,34 +6,29 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"net/http"
-
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"net/http"
 )
 
 const (
-	//todo
-	CirclePrize_HANDLER_PATH = "/CirclePrize"
+	CircleReply_HANDLER_PATH = "/CircleReply"
 )
 
 type (
-	CirclePrizeService interface {
-		//todo
-		Exec(ctx context.Context, in *CirclePrizeIn) (*ykit.Result, error)
+	CircleReplyService interface {
+		Exec(ctx context.Context, in *CircleReplyIn) (*ykit.Result, error)
 	}
 
 	//input data
-	//todo
-	CirclePrizeIn struct {
-		//0 prize 1 comment
-		Action int                `json:"action omitempty"`
-		ID     primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
-		Text   string             `json:"text omitempty"`
-		UID    int64              `json:"uid,omitempty"   bson:"uid,omitempty"`
+	CircleReplyIn struct {
+		ID   primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
+		From int64              `json:"from,omitempty"   bson:"from,omitempty"`
+		To   int64              `json:"to,omitempty"   bson:"to,omitempty"`
+		Text string             `json:"text,omitempty"   bson:"text,omitempty"`
 	}
 
 	//output data
@@ -44,29 +39,28 @@ type (
 	//}
 
 	// handler implements
-	CirclePrizeHandler struct {
+	CircleReplyHandler struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *CirclePrizeHandler) MakeLocalEndpoint(svc CirclePrizeService) endpoint.Endpoint {
+func (r *CircleReplyHandler) MakeLocalEndpoint(svc CircleReplyService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  CirclePrize ###########")
+		fmt.Println("#############  CircleReply ###########")
 		spew.Dump(ctx)
 
-		//todo
-		in := request.(*CirclePrizeIn)
+		in := request.(*CircleReplyIn)
 		return svc.Exec(ctx, in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *CirclePrizeHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(CirclePrizeIn), ctx, req)
+func (r *CircleReplyHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(CircleReplyIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *CirclePrizeHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *CircleReplyHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -75,7 +69,7 @@ func (r *CirclePrizeHandler) DecodeResponse(_ context.Context, res *http.Respons
 }
 
 //handler for router，微服务本地接口，
-func (r *CirclePrizeHandler) HandlerLocal(service CirclePrizeService,
+func (r *CircleReplyHandler) HandlerLocal(service CircleReplyService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -83,6 +77,7 @@ func (r *CirclePrizeHandler) HandlerLocal(service CirclePrizeService,
 	for _, f := range mid {
 		ep = f(ep)
 	}
+
 	before := tran.ServerBefore(ykit.Jwt2ctx())
 
 	opts := make([]tran.ServerOption, 0)
@@ -94,21 +89,30 @@ func (r *CirclePrizeHandler) HandlerLocal(service CirclePrizeService,
 		r.DecodeRequest,
 		r.base.EncodeResponse,
 		opts...)
-
+	//handler = loggingMiddleware()
 	return handler
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *CirclePrizeHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *CircleReplyHandler) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
-		//todo
 		"POST",
-		CirclePrize_HANDLER_PATH,
+		CircleReply_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
+}
+
+func (r *CircleReplyHandler) ProxySD() endpoint.Endpoint {
+	return r.base.ProxyEndpointSD(
+		context.Background(),
+		MSTAG,
+		"POST",
+		CircleReply_HANDLER_PATH,
+		r.DecodeRequest,
+		r.DecodeResponse)
 }

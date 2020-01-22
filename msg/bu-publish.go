@@ -81,11 +81,18 @@ func (r *BulletinPublishHandler) HandlerLocal(service BulletinPublishService,
 		ep = f(ep)
 	}
 
+	before := tran.ServerBefore(ykit.Jwt2ctx())
+
+	opts := make([]tran.ServerOption, 0)
+	opts = append(opts, before)
+	opts = append(opts, options...)
+
 	handler := tran.NewServer(
 		ep,
 		r.DecodeRequest,
 		r.base.EncodeResponse,
-		options...)
+		opts...)
+
 	//handler = loggingMiddleware()
 	return handler
 }
