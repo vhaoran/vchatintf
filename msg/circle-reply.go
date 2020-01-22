@@ -10,58 +10,49 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 )
 
 const (
-	OnLineNotify_HANDLER_PATH = "/OnLineNotify"
+	CircleReply_HANDLER_PATH = "/CircleReply"
 )
 
 type (
-	OnLineNotifyService interface {
-		Exec(in *OnLineNotifyIn) (*ykit.Result, error)
+	CircleReplyService interface {
+		Exec(ctx context.Context, in *CircleReplyIn) (*ykit.Result, error)
 	}
 
 	//input data
-	OnLineNotifyIn struct {
-		UID int64 `json:"uid omitempty"`
+	CircleReplyIn struct {
+		ID   primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
+		From int64              `json:"from omitempty"`
+		To   int64              `json:"to omitempty"`
 	}
 
-	//output data
-	//Result struct {
-	//	Code int         `json:"code"`
-	//	Msg  string      `json:"msg"`
-	//	Data interface{} `json:"data"`
-	//}
-
 	// handler implements
-	OnLineNotifyHandler struct {
+	CircleReplyHandler struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *OnLineNotifyHandler) MakeLocalEndpoint(svc OnLineNotifyService) endpoint.Endpoint {
+func (r *CircleReplyHandler) MakeLocalEndpoint(svc CircleReplyService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  OnLineNotify ###########")
+		fmt.Println("#############  CircleReply ###########")
 		spew.Dump(ctx)
 
-		in := request.(*OnLineNotifyIn)
-		return svc.Exec(in)
+		in := request.(*CircleReplyIn)
+		return svc.Exec(ctx, in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *OnLineNotifyHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	uid := ykit.GetUIDOfContext(ctx)
-	bean := &OnLineNotifyIn{
-		UID: uid,
-	}
-
-	return bean, nil
+func (r *CircleReplyHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(CircleReplyIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *OnLineNotifyHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *CircleReplyHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -70,7 +61,7 @@ func (r *OnLineNotifyHandler) DecodeResponse(_ context.Context, res *http.Respon
 }
 
 //handler for router，微服务本地接口，
-func (r *OnLineNotifyHandler) HandlerLocal(service OnLineNotifyService,
+func (r *CircleReplyHandler) HandlerLocal(service CircleReplyService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -95,25 +86,25 @@ func (r *OnLineNotifyHandler) HandlerLocal(service OnLineNotifyService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *OnLineNotifyHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *CircleReplyHandler) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		OnLineNotify_HANDLER_PATH,
+		CircleReply_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *OnLineNotifyHandler) ProxySD() endpoint.Endpoint {
+func (r *CircleReplyHandler) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		OnLineNotify_HANDLER_PATH,
+		CircleReply_HANDLER_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
 }
