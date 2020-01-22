@@ -34,7 +34,7 @@ func Test_GetUserFriendsInner(t *testing.T) {
 }
 
 func Test_GetUserInfoInnerHandler_Call(t *testing.T) {
-	in := &GetUserInfoInnerIn{
+	in := GetUserInfoInnerIn{
 		UID: 1,
 	}
 
