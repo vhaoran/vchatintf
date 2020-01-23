@@ -3,15 +3,18 @@ package refmsg
 import (
 	"github.com/vhaoran/vchat/common/ytime"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
 )
 
 type MsgHisRef struct {
 	ID        primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
 	CreatedAt ytime.Date         `json:"created_at,omitempty"   bson:"created_at,omitempty"`
-	//0: 私信消息
-	//1：群消息
-	//2：朋友圈消息
-	//3：系统消息(如某用户资料变更)
+	Created   time.Time `json:"created,omitempty"   bson:"created,omitempty"`
+
+	//1: 私信消息 群消息
+	//2：
+	//3：朋友圈消息
+	//4：系统消息(如某用户资料变更)
 	MsgType MsgType `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
 
 	//发送方id

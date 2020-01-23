@@ -3,11 +3,13 @@ package refmsg
 import (
 	"github.com/vhaoran/vchat/common/ytime"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
 )
 
 type BulletinContentRef struct {
 	ID        primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
 	CreatedAt ytime.Date         `json:"created_at,omitempty"   bson:"created_at,omitempty"`
+	Created   time.Time `json:"created,omitempty"   bson:"created,omitempty"`
 
 	// 公众号id
 	BID   int64  `json:"bid,omitempty"   bson:"bid,omitempty"`
