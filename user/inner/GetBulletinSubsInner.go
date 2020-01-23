@@ -39,12 +39,12 @@ type (
 	}
 
 	// handler implements
-	GetBulletinSubsInnerH struct {
+	GetBuSubsInnerH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *GetBulletinSubsInnerH) MakeLocalEndpoint(svc GetBuSubsInnerService) endpoint.Endpoint {
+func (r *GetBuSubsInnerH) MakeLocalEndpoint(svc GetBuSubsInnerService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		ylog.Debug("#############  GetBulletinSubsInner ###########")
 		spew.Dump(ctx)
@@ -55,12 +55,12 @@ func (r *GetBulletinSubsInnerH) MakeLocalEndpoint(svc GetBuSubsInnerService) end
 }
 
 //个人实现,参数不能修改
-func (r *GetBulletinSubsInnerH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+func (r *GetBuSubsInnerH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
 	return r.base.DecodeRequest(new(GetBuSubsInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *GetBulletinSubsInnerH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *GetBuSubsInnerH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response []*GetBuSubsInnerOut
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -69,7 +69,7 @@ func (r *GetBulletinSubsInnerH) DecodeResponse(_ context.Context, res *http.Resp
 }
 
 //handler for router，微服务本地接口，
-func (r *GetBulletinSubsInnerH) HandlerLocal(service GetBuSubsInnerService,
+func (r *GetBuSubsInnerH) HandlerLocal(service GetBuSubsInnerService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -88,7 +88,7 @@ func (r *GetBulletinSubsInnerH) HandlerLocal(service GetBuSubsInnerService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *GetBulletinSubsInnerH) HandlerSD(mid []endpoint.Middleware,
+func (r *GetBuSubsInnerH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
@@ -101,7 +101,7 @@ func (r *GetBulletinSubsInnerH) HandlerSD(mid []endpoint.Middleware,
 		options...)
 }
 
-func (r *GetBulletinSubsInnerH) ProxySD() endpoint.Endpoint {
+func (r *GetBuSubsInnerH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
@@ -115,9 +115,9 @@ func (r *GetBulletinSubsInnerH) ProxySD() endpoint.Endpoint {
 var once_GetBulletinSubsInner sync.Once
 var local_GetBulletinSubsInner_EP endpoint.Endpoint
 
-func (r *GetBulletinSubsInnerH) Call(in *GetBuSubsInnerIn) ([]*GetBuSubsInnerOut, error) {
+func (r *GetBuSubsInnerH) Call(in *GetBuSubsInnerIn) ([]*GetBuSubsInnerOut, error) {
 	once_GetBulletinSubsInner.Do(func() {
-		local_GetBulletinSubsInner_EP = new(GetBulletinSubsInnerH).ProxySD()
+		local_GetBulletinSubsInner_EP = new(GetBuSubsInnerH).ProxySD()
 	})
 	//
 	ep := local_GetBulletinSubsInner_EP

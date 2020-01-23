@@ -68,7 +68,7 @@ func Test_GetBulletinSubsInnerHandler_Call(t *testing.T) {
 		BID: 1,
 	}
 
-	r, err := new(GetBulletinSubsInnerH).Call(in)
+	r, err := new(GetBuSubsInnerH).Call(in)
 	log.Println("----------", "err", err, "------------")
 	ylog.DebugDump("r", r)
 }
