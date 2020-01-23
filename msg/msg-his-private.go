@@ -17,7 +17,7 @@ import (
 
 const (
 	//todo
-	MsgHis_private_HANDLER_PATH = "/PageMsgHis"
+	MsgHis_private_H_PATH = "/PageMsgHis"
 )
 
 type (
@@ -42,12 +42,12 @@ type (
 	//}
 
 	// handler implements
-	MsgHisPrivateHandler struct {
+	MsgHisPrivateH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *MsgHisPrivateHandler) MakeLocalEndpoint(svc MsgHisPrivateService) endpoint.Endpoint {
+func (r *MsgHisPrivateH) MakeLocalEndpoint(svc MsgHisPrivateService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		fmt.Println("#############  PageMsgHis ###########")
 		spew.Dump(ctx)
@@ -59,12 +59,12 @@ func (r *MsgHisPrivateHandler) MakeLocalEndpoint(svc MsgHisPrivateService) endpo
 }
 
 //个人实现,参数不能修改
-func (r *MsgHisPrivateHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+func (r *MsgHisPrivateH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
 	return r.base.DecodeRequest(new(MsgHisPrivateIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *MsgHisPrivateHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *MsgHisPrivateH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response *ypage.PageResult
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -73,7 +73,7 @@ func (r *MsgHisPrivateHandler) DecodeResponse(_ context.Context, res *http.Respo
 }
 
 //handler for router，微服务本地接口，
-func (r *MsgHisPrivateHandler) HandlerLocal(service MsgHisPrivateService,
+func (r *MsgHisPrivateH) HandlerLocal(service MsgHisPrivateService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -92,14 +92,14 @@ func (r *MsgHisPrivateHandler) HandlerLocal(service MsgHisPrivateService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *MsgHisPrivateHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *MsgHisPrivateH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		//todo
 		"POST",
-		MsgHis_private_HANDLER_PATH,
+		MsgHis_private_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,

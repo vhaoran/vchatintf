@@ -10,7 +10,7 @@ type CircleRef struct {
 	ID primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
 	// 发布时间
 	CreatedAt ytime.Date `json:"created_at,omitempty"   bson:"created_at,omitempty"`
-	Created   time.Time `json:"created,omitempty"   bson:"created,omitempty"`
+	Created   time.Time  `json:"created,omitempty"   bson:"created,omitempty"`
 
 	UID         int64  `json:"uid,omitempty"   bson:"uid,omitempty"`
 	UserCodeRef string `json:"user_code ,omitempty"   bson:"user_code ,omitempty"`

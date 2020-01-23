@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	Hello_HANDLER_PATH = "/Hello"
+	Hello_H_PATH = "/Hello"
 )
 
 type (
@@ -37,12 +37,12 @@ type (
 	//}
 
 	// handler implements
-	HelloHandler struct {
+	HelloH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *HelloHandler) MakeLocalEndpoint(svc HelloService) endpoint.Endpoint {
+func (r *HelloH) MakeLocalEndpoint(svc HelloService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		fmt.Println("#############  Hello ###########")
 		spew.Dump(ctx)
@@ -53,7 +53,7 @@ func (r *HelloHandler) MakeLocalEndpoint(svc HelloService) endpoint.Endpoint {
 }
 
 //个人实现,参数不能修改
-func (r *HelloHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+func (r *HelloH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
 	ylog.Debug(" #### enter DecodeRequest ")
 	ylog.DebugDump("ctx:", ctx)
 
@@ -61,7 +61,7 @@ func (r *HelloHandler) DecodeRequest(ctx context.Context, req *http.Request) (in
 }
 
 //个人实现,参数不能修改
-func (r *HelloHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *HelloH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func (r *HelloHandler) DecodeResponse(_ context.Context, res *http.Response) (in
 }
 
 //handler for router，微服务本地接口，
-func (r *HelloHandler) HandlerLocal(service HelloService,
+func (r *HelloH) HandlerLocal(service HelloService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -103,25 +103,25 @@ func (r *HelloHandler) HandlerLocal(service HelloService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *HelloHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *HelloH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		Hello_HANDLER_PATH,
+		Hello_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *HelloHandler) ProxySD() endpoint.Endpoint {
+func (r *HelloH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		Hello_HANDLER_PATH,
+		Hello_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
 }

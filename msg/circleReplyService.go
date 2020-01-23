@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	CircleReply_HANDLER_PATH = "/CircleReply"
+	CircleReply_H_PATH = "/CircleReply"
 )
 
 type (
@@ -31,12 +31,12 @@ type (
 	}
 
 	// handler implements
-	CircleReplyHandler struct {
+	CircleReplyH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *CircleReplyHandler) MakeLocalEndpoint(svc CircleReplyService) endpoint.Endpoint {
+func (r *CircleReplyH) MakeLocalEndpoint(svc CircleReplyService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		fmt.Println("#############  CircleReply ###########")
 		spew.Dump(ctx)
@@ -47,12 +47,12 @@ func (r *CircleReplyHandler) MakeLocalEndpoint(svc CircleReplyService) endpoint.
 }
 
 //个人实现,参数不能修改
-func (r *CircleReplyHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+func (r *CircleReplyH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
 	return r.base.DecodeRequest(new(CircleReplyIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *CircleReplyHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *CircleReplyH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ func (r *CircleReplyHandler) DecodeResponse(_ context.Context, res *http.Respons
 }
 
 //handler for router，微服务本地接口，
-func (r *CircleReplyHandler) HandlerLocal(service CircleReplyService,
+func (r *CircleReplyH) HandlerLocal(service CircleReplyService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -86,25 +86,25 @@ func (r *CircleReplyHandler) HandlerLocal(service CircleReplyService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *CircleReplyHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *CircleReplyH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		CircleReply_HANDLER_PATH,
+		CircleReply_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *CircleReplyHandler) ProxySD() endpoint.Endpoint {
+func (r *CircleReplyH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		CircleReply_HANDLER_PATH,
+		CircleReply_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
 }

@@ -14,21 +14,21 @@ import (
 )
 
 const (
-	GetBulletinSubsInner_HANDLER_PATH = "/GetBulletinSubsInner"
+	GetBuSubsInner_H_PATH = "/GetBulletinSubsInner"
 )
 
 type (
-	GetBulletinSubsInnerService interface {
-		Exec(in *GetBulletinSubsInnerIn) ([]*GetBulletinSubsInnerOut, error)
+	GetBuSubsInnerService interface {
+		Exec(in *GetBuSubsInnerIn) ([]*GetBuSubsInnerOut, error)
 	}
 
 	//input data
-	GetBulletinSubsInnerIn struct {
+	GetBuSubsInnerIn struct {
 		BID int64 `json:"bid,omitempty"`
 	}
 
 	//output data
-	GetBulletinSubsInnerOut struct {
+	GetBuSubsInnerOut struct {
 		UID int64 `json:"uid,omitempty"`
 		//冗余字段，提升性能,用户帐号
 		UserCodeRef string `json:"user_code_ref,omitempty"`
@@ -39,29 +39,29 @@ type (
 	}
 
 	// handler implements
-	GetBulletinSubsInnerHandler struct {
+	GetBulletinSubsInnerH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *GetBulletinSubsInnerHandler) MakeLocalEndpoint(svc GetBulletinSubsInnerService) endpoint.Endpoint {
+func (r *GetBulletinSubsInnerH) MakeLocalEndpoint(svc GetBuSubsInnerService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		ylog.Debug("#############  GetBulletinSubsInner ###########")
 		spew.Dump(ctx)
 
-		in := request.(*GetBulletinSubsInnerIn)
+		in := request.(*GetBuSubsInnerIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *GetBulletinSubsInnerHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(GetBulletinSubsInnerIn), ctx, req)
+func (r *GetBulletinSubsInnerH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(GetBuSubsInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *GetBulletinSubsInnerHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
-	var response []*GetBulletinSubsInnerOut
+func (r *GetBulletinSubsInnerH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+	var response []*GetBuSubsInnerOut
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (r *GetBulletinSubsInnerHandler) DecodeResponse(_ context.Context, res *htt
 }
 
 //handler for router，微服务本地接口，
-func (r *GetBulletinSubsInnerHandler) HandlerLocal(service GetBulletinSubsInnerService,
+func (r *GetBulletinSubsInnerH) HandlerLocal(service GetBuSubsInnerService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -88,25 +88,25 @@ func (r *GetBulletinSubsInnerHandler) HandlerLocal(service GetBulletinSubsInnerS
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *GetBulletinSubsInnerHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *GetBulletinSubsInnerH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		GetBulletinSubsInner_HANDLER_PATH,
+		GetBuSubsInner_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *GetBulletinSubsInnerHandler) ProxySD() endpoint.Endpoint {
+func (r *GetBulletinSubsInnerH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		GetBulletinSubsInner_HANDLER_PATH,
+		GetBuSubsInner_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
 }
@@ -115,9 +115,9 @@ func (r *GetBulletinSubsInnerHandler) ProxySD() endpoint.Endpoint {
 var once_GetBulletinSubsInner sync.Once
 var local_GetBulletinSubsInner_EP endpoint.Endpoint
 
-func (r *GetBulletinSubsInnerHandler) Call(in *GetBulletinSubsInnerIn) ([]*GetBulletinSubsInnerOut, error) {
+func (r *GetBulletinSubsInnerH) Call(in *GetBuSubsInnerIn) ([]*GetBuSubsInnerOut, error) {
 	once_GetBulletinSubsInner.Do(func() {
-		local_GetBulletinSubsInner_EP = new(GetBulletinSubsInnerHandler).ProxySD()
+		local_GetBulletinSubsInner_EP = new(GetBulletinSubsInnerH).ProxySD()
 	})
 	//
 	ep := local_GetBulletinSubsInner_EP
@@ -128,5 +128,5 @@ func (r *GetBulletinSubsInnerHandler) Call(in *GetBulletinSubsInnerIn) ([]*GetBu
 		return nil, err
 	}
 
-	return result.([]*GetBulletinSubsInnerOut), nil
+	return result.([]*GetBuSubsInnerOut), nil
 }

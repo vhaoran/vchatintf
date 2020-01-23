@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	MsgHisGroup_HANDLER_PATH = "/MsgHisGroup"
+	MsgHisGroup_H_PATH = "/MsgHisGroup"
 )
 
 type (
@@ -32,12 +32,12 @@ type (
 	//output data
 
 	// handler implements
-	MsgHisGroupHandler struct {
+	MsgHisGroupH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *MsgHisGroupHandler) MakeLocalEndpoint(svc MsgHisGroupService) endpoint.Endpoint {
+func (r *MsgHisGroupH) MakeLocalEndpoint(svc MsgHisGroupService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		fmt.Println("#############  MsgHisGroup ###########")
 		spew.Dump(ctx)
@@ -48,12 +48,12 @@ func (r *MsgHisGroupHandler) MakeLocalEndpoint(svc MsgHisGroupService) endpoint.
 }
 
 //个人实现,参数不能修改
-func (r *MsgHisGroupHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+func (r *MsgHisGroupH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
 	return r.base.DecodeRequest(new(MsgHisGroupIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *MsgHisGroupHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *MsgHisGroupH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response *ypage.PageResult
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (r *MsgHisGroupHandler) DecodeResponse(_ context.Context, res *http.Respons
 }
 
 //handler for router，微服务本地接口，
-func (r *MsgHisGroupHandler) HandlerLocal(service MsgHisGroupService,
+func (r *MsgHisGroupH) HandlerLocal(service MsgHisGroupService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -81,25 +81,25 @@ func (r *MsgHisGroupHandler) HandlerLocal(service MsgHisGroupService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *MsgHisGroupHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *MsgHisGroupH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		MsgHisGroup_HANDLER_PATH,
+		MsgHisGroup_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *MsgHisGroupHandler) ProxySD() endpoint.Endpoint {
+func (r *MsgHisGroupH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		MsgHisGroup_HANDLER_PATH,
+		MsgHisGroup_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
 }

@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type BulletinContentRef struct {
+type BuCntRef struct {
 	ID        primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
 	CreatedAt ytime.Date         `json:"created_at,omitempty"   bson:"created_at,omitempty"`
 	Created   time.Time `json:"created,omitempty"   bson:"created,omitempty"`

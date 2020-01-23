@@ -15,7 +15,7 @@ import (
 
 const (
 	//todo
-	Login_HANDLER_PATH = "/Login"
+	Login_H_PATH = "/Login"
 )
 
 type (
@@ -43,12 +43,12 @@ type (
 	//}
 
 	// handler implements
-	LoginHandler struct {
+	LoginH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *LoginHandler) MakeLocalEndpoint(svc LoginService) endpoint.Endpoint {
+func (r *LoginH) MakeLocalEndpoint(svc LoginService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		fmt.Println("#############  Login ###########")
 		spew.Dump(ctx)
@@ -60,12 +60,12 @@ func (r *LoginHandler) MakeLocalEndpoint(svc LoginService) endpoint.Endpoint {
 }
 
 //个人实现,参数不能修改
-func (r *LoginHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+func (r *LoginH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
 	return r.base.DecodeRequest(new(LoginIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *LoginHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *LoginH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func (r *LoginHandler) DecodeResponse(_ context.Context, res *http.Response) (in
 }
 
 //handler for router，微服务本地接口，
-func (r *LoginHandler) HandlerLocal(service LoginService,
+func (r *LoginH) HandlerLocal(service LoginService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -93,14 +93,14 @@ func (r *LoginHandler) HandlerLocal(service LoginService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *LoginHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *LoginH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		//todo
 		"POST",
-		Login_HANDLER_PATH,
+		Login_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,

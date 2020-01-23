@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	GetUserFriendsInner_HANDLER_PATH = "/GetUserFriendsInner"
+	GetUserFriendsInner_H_PATH = "/GetUserFriendsInner"
 )
 
 //获取用户所有好友
@@ -39,12 +39,12 @@ type (
 	}
 
 	// handler implements
-	GetUserFriendsInnerHandler struct {
+	GetUserFriendsInnerH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *GetUserFriendsInnerHandler) MakeLocalEndpoint(svc GetUserFriendsInnerService) endpoint.Endpoint {
+func (r *GetUserFriendsInnerH) MakeLocalEndpoint(svc GetUserFriendsInnerService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		fmt.Println("#############  GetUserFriendsInner ###########")
 		spew.Dump(ctx)
@@ -55,12 +55,12 @@ func (r *GetUserFriendsInnerHandler) MakeLocalEndpoint(svc GetUserFriendsInnerSe
 }
 
 //个人实现,参数不能修改
-func (r *GetUserFriendsInnerHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+func (r *GetUserFriendsInnerH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
 	return r.base.DecodeRequest(new(GetUserFriendsInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *GetUserFriendsInnerHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *GetUserFriendsInnerH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response []*GetUserFriendsInnerOut
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -69,7 +69,7 @@ func (r *GetUserFriendsInnerHandler) DecodeResponse(_ context.Context, res *http
 }
 
 //handler for router，微服务本地接口，
-func (r *GetUserFriendsInnerHandler) HandlerLocal(service GetUserFriendsInnerService,
+func (r *GetUserFriendsInnerH) HandlerLocal(service GetUserFriendsInnerService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -88,25 +88,25 @@ func (r *GetUserFriendsInnerHandler) HandlerLocal(service GetUserFriendsInnerSer
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *GetUserFriendsInnerHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *GetUserFriendsInnerH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		GetUserFriendsInner_HANDLER_PATH,
+		GetUserFriendsInner_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *GetUserFriendsInnerHandler) ProxySD() endpoint.Endpoint {
+func (r *GetUserFriendsInnerH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		GetUserFriendsInner_HANDLER_PATH,
+		GetUserFriendsInner_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
 }
@@ -115,9 +115,9 @@ func (r *GetUserFriendsInnerHandler) ProxySD() endpoint.Endpoint {
 var once_GetUserFriendsInner sync.Once
 var local_GetUserFriendsInner_EP endpoint.Endpoint
 
-func (r *GetUserFriendsInnerHandler) Call(in *GetUserFriendsInnerIn) ([]*GetUserFriendsInnerOut, error) {
+func (r *GetUserFriendsInnerH) Call(in *GetUserFriendsInnerIn) ([]*GetUserFriendsInnerOut, error) {
 	once_GetUserFriendsInner.Do(func() {
-		local_GetUserFriendsInner_EP = new(GetUserFriendsInnerHandler).ProxySD()
+		local_GetUserFriendsInner_EP = new(GetUserFriendsInnerH).ProxySD()
 	})
 	//
 	ep := local_GetUserFriendsInner_EP

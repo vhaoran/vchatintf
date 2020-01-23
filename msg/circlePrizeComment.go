@@ -6,31 +6,34 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
-
-	"github.com/vhaoran/vchatintf/msg/refmsg"
 )
 
 const (
 	//todo
-	BulletinPublish_HANDLER_PATH = "/BulletinPublish"
+	CirclePrize_H_PATH = "/CirclePrize"
 )
 
 type (
-	BulletinPublishService interface {
+	CirclePrizeService interface {
 		//todo
-		Exec(in *BulletinPublishIn) (*ykit.Result, error)
+		Exec(in *CirclePrizeIn) (*ykit.Result, error)
 	}
 
 	//input data
 	//todo
-	BulletinPublishIn struct {
-		refmsg.BulletinContentRef
+	CirclePrizeIn struct {
+		//0 prize 1 comment
+		Action int                `json:"action omitempty"`
+		ID     primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
+		Text   string             `json:"text omitempty"`
+		UID    int64              `json:"uid,omitempty"   bson:"uid,omitempty"`
 	}
 
 	//output data
@@ -41,29 +44,29 @@ type (
 	//}
 
 	// handler implements
-	BulletinPublishHandler struct {
+	CirclePrizeH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *BulletinPublishHandler) MakeLocalEndpoint(svc BulletinPublishService) endpoint.Endpoint {
+func (r *CirclePrizeH) MakeLocalEndpoint(svc CirclePrizeService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  BulletinPublish ###########")
+		fmt.Println("#############  CirclePrize ###########")
 		spew.Dump(ctx)
 
 		//todo
-		in := request.(*BulletinPublishIn)
+		in := request.(*CirclePrizeIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *BulletinPublishHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(BulletinPublishIn), ctx, req)
+func (r *CirclePrizeH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(CirclePrizeIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *BulletinPublishHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *CirclePrizeH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -72,7 +75,7 @@ func (r *BulletinPublishHandler) DecodeResponse(_ context.Context, res *http.Res
 }
 
 //handler for router，微服务本地接口，
-func (r *BulletinPublishHandler) HandlerLocal(service BulletinPublishService,
+func (r *CirclePrizeH) HandlerLocal(service CirclePrizeService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -91,14 +94,14 @@ func (r *BulletinPublishHandler) HandlerLocal(service BulletinPublishService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *BulletinPublishHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *CirclePrizeH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		//todo
 		"POST",
-		BulletinPublish_HANDLER_PATH,
+		CirclePrize_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,

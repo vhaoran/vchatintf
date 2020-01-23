@@ -28,7 +28,7 @@ func Test_GetUserFriendsInner(t *testing.T) {
 		UID: 1,
 	}
 
-	r, err := new(GetUserFriendsInnerHandler).Call(in)
+	r, err := new(GetUserFriendsInnerH).Call(in)
 	log.Println("----------", "err", err, "------------")
 	ylog.DebugDump("r", r)
 }
@@ -38,7 +38,7 @@ func Test_GetUserInfoInnerHandler_Call(t *testing.T) {
 		UID: 1,
 	}
 
-	r, err := new(GetUserInfoInnerHandler).Call(in)
+	r, err := new(GetUserInfoInnerH).Call(in)
 	log.Println("----------", "err", err, "------------")
 	ylog.DebugDump("r", r)
 }
@@ -48,7 +48,7 @@ func Test_GetGroupMembersInnerHandler_Call(t *testing.T) {
 		GID: 1,
 	}
 
-	r, err := new(GetGroupMembersInnerHandler).Call(in)
+	r, err := new(GetGroupMembersInnerH).Call(in)
 	log.Println("----------", "err", err, "------------")
 	ylog.DebugDump("r", r)
 }
@@ -58,27 +58,27 @@ func Test_GetGroupInfoInnerHandler_Call(t *testing.T) {
 		GID: 1,
 	}
 
-	r, err := new(GetGroupInfoInnerHandler).Call(in)
+	r, err := new(GetGroupInfoInnerH).Call(in)
 	log.Println("----------", "err", err, "------------")
 	ylog.DebugDump("r", r)
 }
 
 func Test_GetBulletinSubsInnerHandler_Call(t *testing.T) {
-	in := &GetBulletinSubsInnerIn{
+	in := &GetBuSubsInnerIn{
 		BID: 1,
 	}
 
-	r, err := new(GetBulletinSubsInnerHandler).Call(in)
+	r, err := new(GetBulletinSubsInnerH).Call(in)
 	log.Println("----------", "err", err, "------------")
 	ylog.DebugDump("r", r)
 }
 
 func Test_GetBulletinInfoInnerHandler_Call(t *testing.T) {
-	in := &GetBulletinInfoInnerIn{
+	in := &GetBuInfoInnerIn{
 		BID: 1,
 	}
 
-	r, err := new(GetBulletinInfoInnerHandler).Call(in)
+	r, err := new(GetBuInfoInnerH).Call(in)
 	log.Println("----------", "err", err, "------------")
 	ylog.DebugDump("r", r)
 }

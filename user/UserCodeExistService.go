@@ -16,7 +16,7 @@ import (
 
 const (
 	//todo
-	UserCodeExist_HANDLER_PATH = "/UserCodeExist"
+	UserCodeExist_H_PATH = "/UserCodeExist"
 )
 
 type (
@@ -39,12 +39,12 @@ type (
 	//}
 
 	// handler implements
-	UserCodeExistHandler struct {
+	UserCodeExistH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *UserCodeExistHandler) MakeLocalEndpoint(svc UserCodeExistService) endpoint.Endpoint {
+func (r *UserCodeExistH) MakeLocalEndpoint(svc UserCodeExistService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		fmt.Println("#############  UserCodeExist ###########")
 		spew.Dump(ctx)
@@ -56,12 +56,12 @@ func (r *UserCodeExistHandler) MakeLocalEndpoint(svc UserCodeExistService) endpo
 }
 
 //个人实现,参数不能修改
-func (r *UserCodeExistHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+func (r *UserCodeExistH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
 	return r.base.DecodeRequest(new(UserCodeExistIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *UserCodeExistHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *UserCodeExistH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func (r *UserCodeExistHandler) DecodeResponse(_ context.Context, res *http.Respo
 }
 
 //handler for router，微服务本地接口，
-func (r *UserCodeExistHandler) HandlerLocal(service UserCodeExistService,
+func (r *UserCodeExistH) HandlerLocal(service UserCodeExistService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -89,14 +89,14 @@ func (r *UserCodeExistHandler) HandlerLocal(service UserCodeExistService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *UserCodeExistHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *UserCodeExistH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		//todo
 		"POST",
-		UserCodeExist_HANDLER_PATH,
+		UserCodeExist_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,

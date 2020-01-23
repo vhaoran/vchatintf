@@ -38,12 +38,12 @@ type (
 	//}
 
 	// handler implements
-	NotifyMsgInnerHandler struct {
+	NotifyMsgInnerH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *NotifyMsgInnerHandler) MakeLocalEndpoint(svc NotifyMsgInnerService) endpoint.Endpoint {
+func (r *NotifyMsgInnerH) MakeLocalEndpoint(svc NotifyMsgInnerService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		fmt.Println("#############  NotifyMsgInner ###########")
 		spew.Dump(ctx)
@@ -54,12 +54,12 @@ func (r *NotifyMsgInnerHandler) MakeLocalEndpoint(svc NotifyMsgInnerService) end
 }
 
 //个人实现,参数不能修改
-func (r *NotifyMsgInnerHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+func (r *NotifyMsgInnerH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
 	return r.base.DecodeRequest(new(NotifyMsgInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *NotifyMsgInnerHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *NotifyMsgInnerH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -68,7 +68,7 @@ func (r *NotifyMsgInnerHandler) DecodeResponse(_ context.Context, res *http.Resp
 }
 
 //handler for router，微服务本地接口，
-func (r *NotifyMsgInnerHandler) HandlerLocal(service NotifyMsgInnerService,
+func (r *NotifyMsgInnerH) HandlerLocal(service NotifyMsgInnerService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -87,7 +87,7 @@ func (r *NotifyMsgInnerHandler) HandlerLocal(service NotifyMsgInnerService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *NotifyMsgInnerHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *NotifyMsgInnerH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
@@ -100,7 +100,7 @@ func (r *NotifyMsgInnerHandler) HandlerSD(mid []endpoint.Middleware,
 		options...)
 }
 
-func (r *NotifyMsgInnerHandler) ProxySD() endpoint.Endpoint {
+func (r *NotifyMsgInnerH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
@@ -110,13 +110,13 @@ func (r *NotifyMsgInnerHandler) ProxySD() endpoint.Endpoint {
 		r.DecodeResponse)
 }
 
-//只用于内部调用 ，不从风头调用
+//只用于内部调用 ，不从gateway调用
 var once_NotifyMsgInner sync.Once
 var local_NotifyMsgInner_EP endpoint.Endpoint
 
-func (r *NotifyMsgInnerHandler) Call(in NotifyMsgInnerIn) (*ykit.Result, error) {
+func (r *NotifyMsgInnerH) Call(in NotifyMsgInnerIn) (*ykit.Result, error) {
 	once_NotifyMsgInner.Do(func() {
-		local_NotifyMsgInner_EP = new(NotifyMsgInnerHandler).ProxySD()
+		local_NotifyMsgInner_EP = new(NotifyMsgInnerH).ProxySD()
 	})
 	//
 	ep := local_NotifyMsgInner_EP

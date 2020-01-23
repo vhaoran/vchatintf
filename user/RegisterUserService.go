@@ -16,7 +16,7 @@ import (
 
 const (
 	//todo
-	RegUser_HANDLER_PATH = "/RegUser"
+	RegUser_H_PATH = "/RegUser"
 )
 
 type (
@@ -43,12 +43,12 @@ type (
 	//}
 
 	// handler implements
-	RegUserHandler struct {
+	RegUserH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *RegUserHandler) MakeLocalEndpoint(svc RegUserService) endpoint.Endpoint {
+func (r *RegUserH) MakeLocalEndpoint(svc RegUserService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		fmt.Println("#############  RegUser ###########")
 		spew.Dump(ctx)
@@ -60,12 +60,12 @@ func (r *RegUserHandler) MakeLocalEndpoint(svc RegUserService) endpoint.Endpoint
 }
 
 //个人实现,参数不能修改
-func (r *RegUserHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+func (r *RegUserH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
 	return r.base.DecodeRequest(new(RegUserIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *RegUserHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *RegUserH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func (r *RegUserHandler) DecodeResponse(_ context.Context, res *http.Response) (
 }
 
 //handler for router，微服务本地接口，
-func (r *RegUserHandler) HandlerLocal(service RegUserService,
+func (r *RegUserH) HandlerLocal(service RegUserService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -93,17 +93,16 @@ func (r *RegUserHandler) HandlerLocal(service RegUserService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *RegUserHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *RegUserH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		//todo
 		"POST",
-		RegUser_HANDLER_PATH,
+		RegUser_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
-

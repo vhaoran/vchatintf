@@ -14,12 +14,12 @@ import (
 )
 
 const (
-	OnLineNotify_HANDLER_PATH = "/OnLineNotify"
+	OnLineNotify_H_PATH = "/OnLineNotify"
 )
 
 type (
 	OnLineNotifyService interface {
-		Exec(ctx context.Context,in *OnLineNotifyIn) (*ykit.Result, error)
+		Exec(ctx context.Context, in *OnLineNotifyIn) (*ykit.Result, error)
 	}
 
 	//input data
@@ -35,23 +35,23 @@ type (
 	//}
 
 	// handler implements
-	OnLineNotifyHandler struct {
+	OnLineNotifyH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *OnLineNotifyHandler) MakeLocalEndpoint(svc OnLineNotifyService) endpoint.Endpoint {
+func (r *OnLineNotifyH) MakeLocalEndpoint(svc OnLineNotifyService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		fmt.Println("#############  OnLineNotify ###########")
 		spew.Dump(ctx)
 
 		in := request.(*OnLineNotifyIn)
-		return svc.Exec(ctx,in)
+		return svc.Exec(ctx, in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *OnLineNotifyHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+func (r *OnLineNotifyH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
 	uid := ykit.GetUIDOfContext(ctx)
 	bean := &OnLineNotifyIn{
 		UID: uid,
@@ -61,7 +61,7 @@ func (r *OnLineNotifyHandler) DecodeRequest(ctx context.Context, req *http.Reque
 }
 
 //个人实现,参数不能修改
-func (r *OnLineNotifyHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *OnLineNotifyH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func (r *OnLineNotifyHandler) DecodeResponse(_ context.Context, res *http.Respon
 }
 
 //handler for router，微服务本地接口，
-func (r *OnLineNotifyHandler) HandlerLocal(service OnLineNotifyService,
+func (r *OnLineNotifyH) HandlerLocal(service OnLineNotifyService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -95,25 +95,25 @@ func (r *OnLineNotifyHandler) HandlerLocal(service OnLineNotifyService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *OnLineNotifyHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *OnLineNotifyH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		OnLineNotify_HANDLER_PATH,
+		OnLineNotify_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *OnLineNotifyHandler) ProxySD() endpoint.Endpoint {
+func (r *OnLineNotifyH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		OnLineNotify_HANDLER_PATH,
+		OnLineNotify_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
 }

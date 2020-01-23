@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	CirclePublish_HANDLER_PATH = "/CirclePublish"
+	CirclePublish_H_PATH = "/CirclePublish"
 )
 
 type (
@@ -37,12 +37,12 @@ type (
 	//}
 
 	// handler implements
-	CirclePublishHandler struct {
+	CirclePublishH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *CirclePublishHandler) MakeLocalEndpoint(svc CirclePublishService) endpoint.Endpoint {
+func (r *CirclePublishH) MakeLocalEndpoint(svc CirclePublishService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		fmt.Println("#############  CirclePublish ###########")
 		spew.Dump(ctx)
@@ -53,12 +53,12 @@ func (r *CirclePublishHandler) MakeLocalEndpoint(svc CirclePublishService) endpo
 }
 
 //个人实现,参数不能修改
-func (r *CirclePublishHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+func (r *CirclePublishH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
 	return r.base.DecodeRequest(new(CirclePublishIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *CirclePublishHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *CirclePublishH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func (r *CirclePublishHandler) DecodeResponse(_ context.Context, res *http.Respo
 }
 
 //handler for router，微服务本地接口，
-func (r *CirclePublishHandler) HandlerLocal(service CirclePublishService,
+func (r *CirclePublishH) HandlerLocal(service CirclePublishService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -86,13 +86,13 @@ func (r *CirclePublishHandler) HandlerLocal(service CirclePublishService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *CirclePublishHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *CirclePublishH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		CirclePublish_HANDLER_PATH,
+		CirclePublish_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
