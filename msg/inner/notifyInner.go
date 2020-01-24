@@ -60,7 +60,7 @@ func (r *NotifyMsgInnerH) DecodeRequest(ctx context.Context, req *http.Request) 
 
 //个人实现,参数不能修改
 func (r *NotifyMsgInnerH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
-	var response ykit.Result
+	var response *ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
 	}
@@ -114,7 +114,7 @@ func (r *NotifyMsgInnerH) ProxySD() endpoint.Endpoint {
 var once_NotifyMsgInner sync.Once
 var local_NotifyMsgInner_EP endpoint.Endpoint
 
-func (r *NotifyMsgInnerH) Call(in NotifyMsgInnerIn) (*ykit.Result, error) {
+func (r *NotifyMsgInnerH) Call(in *NotifyMsgInnerIn) (*ykit.Result, error) {
 	once_NotifyMsgInner.Do(func() {
 		local_NotifyMsgInner_EP = new(NotifyMsgInnerH).ProxySD()
 	})
