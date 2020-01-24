@@ -21,7 +21,7 @@ curl -X POST \
 -H 'jwt:test/1' \
 -H 'Content-Type:application/json' \
 -d '{"send_back":true,"msg_type":1,"from":1,"to":2,"body_type":1,"body":"good morning"}' \
-127.0.0.1:9060/hello \
+127.0.0.1:9060/SendMsg \
 
 */
 
