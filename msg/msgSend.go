@@ -16,6 +16,15 @@ import (
 	"github.com/vhaoran/vchatintf/msg/refmsg"
 )
 
+/*
+curl -X POST \
+-H 'jwt:test/1' \
+-H 'Content-Type:application/json' \
+-d '{"send_back":true,"msg_type":1,"from":1,"to":2,"body_type":1,"body":"good morning"}' \
+127.0.0.1:9060/hello \
+
+*/
+
 const (
 	//todo
 	MsgSend_H_PATH = "/SendMsg"
@@ -35,10 +44,10 @@ type (
 		MsgType  refmsg.MsgType `json:"msg_type,omitempty"   bson:"msg_type,omitempty"`
 
 		//发送方id
-		FromUID int64 `json:"from_uid,omitempty"   bson:"from_uid,omitempty"`
+		FromUID int64 `json:"from,omitempty"   bson:"from_uid,omitempty"`
 
 		//目标用户ID
-		ToUID int64 `json:"to_uid,omitempty"   bson:"to_uid,omitempty"`
+		ToUID int64 `json:"to,omitempty"   bson:"to_uid,omitempty"`
 
 		ToGID int64 `json:"to_gid,omitempty"   bson:"to_gid,omitempty"`
 		//自定义的消息内容类型，可选
