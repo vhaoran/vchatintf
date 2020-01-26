@@ -19,6 +19,10 @@ const (
 	UserCodeExist_H_PATH = "/UserCodeExist"
 )
 
+/*
+判断用户编码是否存在
+*/
+
 type (
 	UserCodeExistService interface {
 		//todo
