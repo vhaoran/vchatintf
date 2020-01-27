@@ -4,11 +4,10 @@ package refmsg
 // content type
 
 const (
-	BT_COMMON       = 1
-	BT_COMMON_TITLE = "普通消息"
+	BT_COMMON = iota + 1
 
-	BT_CARD             = 10
-	BT_CARD_TITLE       = "名片"
-	BT_CARD_GROUP       = 10
-	BT_CARD_GROUP_TITLE = "名片"
+	BT_CARD = iota + 10
+	//BT_CARD_TITLE       = "名片"
+	BT_CARD_GROUP
+	//BT_CARD_GROUP_TITLE = "名片"
 )
