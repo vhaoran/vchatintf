@@ -20,7 +20,7 @@ const (
 
 type (
 	ToBlackListService interface {
-		Exec(in *ToBlackListIn) (*ykit.Result, error)
+		Exec(ctx context.Context, in *ToBlackListIn) (*ykit.Result, error)
 	}
 
 	//input data
@@ -42,7 +42,7 @@ func (r *ToBlackListH) MakeLocalEndpoint(svc ToBlackListService) endpoint.Endpoi
 		spew.Dump(ctx)
 
 		in := request.(*ToBlackListIn)
-		return svc.Exec(in)
+		return svc.Exec(ctx, in)
 	}
 }
 
