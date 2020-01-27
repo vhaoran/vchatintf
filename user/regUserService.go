@@ -21,7 +21,7 @@ const (
 
 type (
 	RegUserService interface {
-		Exec(ctx context.Context, in *RegUserIn) (*ykit.Result, error)
+		Exec(in *RegUserIn) (*ykit.Result, error)
 	}
 
 	//input data
@@ -55,7 +55,7 @@ func (r *RegUserH) MakeLocalEndpoint(svc RegUserService) endpoint.Endpoint {
 
 		//todo
 		in := request.(*RegUserIn)
-		return svc.Exec(ctx, in)
+		return svc.Exec(in)
 	}
 }
 
