@@ -3,7 +3,7 @@ package refuser
 type GroupInfoRef struct {
 	ID int64
 	//群名称
-	Name string `json:"name,omitempty" gorm:"type:varchar(50);unique_index"`
+	Name string `json:"name,omitempty" gorm:"type:varchar(50);index"`
 
 	//图标
 	Icon string `json:"icon omitempty" gorm:"type:varchar(100)"`
