@@ -1,7 +1,5 @@
 package intf
 
-//for snippet用于标准返回值的微服务接口
-
 import (
 	"context"
 	"encoding/json"
@@ -15,44 +13,44 @@ import (
 )
 
 const (
-	ResetPwd_H_PATH = "/ResetPwd"
+	MobileIdentifyCode_H_PATH = "/MobileIdentifyCode"
 )
 
 type (
-	ResetPwdService interface {
-		Exec(ctx context.Context, in *ResetPwdIn) (*ykit.Result, error)
+	MobileIdentifyCodeService interface {
+		Exec(ctx context.Context, in *MobileIdentifyCodeIn) (*ykit.Result, error)
 	}
 
 	//input data
-	ResetPwdIn struct {
-		MsgCode string `json:"msg_code omitempty"`
-		NewPwd  string `json:"new_pwd omitempty"`
+	MobileIdentifyCodeIn struct {
+		UID int64 `json:"uid omitempty"`
 	}
 
 	//output data
+
 	// handler implements
-	ResetPwdH struct {
+	MobileIdentifyCodeH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *ResetPwdH) MakeLocalEndpoint(svc ResetPwdService) endpoint.Endpoint {
+func (r *MobileIdentifyCodeH) MakeLocalEndpoint(svc MobileIdentifyCodeService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  ResetPwd ###########")
+		fmt.Println("#############  MobileIdentifyCode ###########")
 		spew.Dump(ctx)
 
-		in := request.(*ResetPwdIn)
+		in := request.(*MobileIdentifyCodeIn)
 		return svc.Exec(ctx, in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *ResetPwdH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(ResetPwdIn), ctx, req)
+func (r *MobileIdentifyCodeH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return new(MobileIdentifyCodeIn), nil
 }
 
 //个人实现,参数不能修改
-func (r *ResetPwdH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *MobileIdentifyCodeH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response *ykit.Result
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -61,7 +59,7 @@ func (r *ResetPwdH) DecodeResponse(_ context.Context, res *http.Response) (inter
 }
 
 //handler for router，微服务本地接口，
-func (r *ResetPwdH) HandlerLocal(service ResetPwdService,
+func (r *MobileIdentifyCodeH) HandlerLocal(service MobileIdentifyCodeService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -85,25 +83,25 @@ func (r *ResetPwdH) HandlerLocal(service ResetPwdService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *ResetPwdH) HandlerSD(mid []endpoint.Middleware,
+func (r *MobileIdentifyCodeH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		ResetPwd_H_PATH,
+		MobileIdentifyCode_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *ResetPwdH) ProxySD() endpoint.Endpoint {
+func (r *MobileIdentifyCodeH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		ResetPwd_H_PATH,
+		MobileIdentifyCode_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
 }
