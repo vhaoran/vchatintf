@@ -26,7 +26,7 @@ type (
 	//input data
 	MsgHisGroupIn struct {
 		ypage.PageBean
-		GID int64 `json:"gid omitempty"`
+		GID int64 `json:"gid,omitempty"`
 	}
 
 	//output data

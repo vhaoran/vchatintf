@@ -29,8 +29,8 @@ type (
 	//input data
 	//todo
 	MsgHisPrivateIn struct {
-		From int64 `json:"from omitempty"`
-		To   int64 `json:"to omitempty"`
+		From int64 `json:"from,omitempty"`
+		To   int64 `json:"to,omitempty"`
 		ypage.PageBean
 	}
 

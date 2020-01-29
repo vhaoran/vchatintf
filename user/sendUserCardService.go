@@ -25,8 +25,8 @@ type (
 
 	//input data
 	SendUserCardIn struct {
-		From int64 `json:"from omitempty"`
-		To   int64 `json:"to omitempty"`
+		From int64 `json:"from,omitempty"`
+		To   int64 `json:"to,omitempty"`
 	}
 
 	//output data

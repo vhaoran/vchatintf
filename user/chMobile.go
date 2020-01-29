@@ -25,9 +25,9 @@ type (
 
 	//input data
 	ChMobileIn struct {
-		UID       int64  `json:"uid omitempty"`
-		MsgCode   string `json:"msg_code omitempty"`
-		NewMobile string `json:"new_mobile omitempty"`
+		UID       int64  `json:"uid,omitempty"`
+		MsgCode   string `json:"msg_code,omitempty"`
+		NewMobile string `json:"new_mobile,omitempty"`
 	}
 
 	//output data

@@ -25,8 +25,8 @@ type (
 
 	//input data
 	ResetPwdIn struct {
-		MsgCode string `json:"msg_code omitempty"`
-		NewPwd  string `json:"new_pwd omitempty"`
+		MsgCode string `json:"msg_code,omitempty"`
+		NewPwd  string `json:"new_pwd,omitempty"`
 	}
 
 	//output data

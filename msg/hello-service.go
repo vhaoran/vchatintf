@@ -25,7 +25,7 @@ type (
 
 	//input data
 	HelloIn struct {
-		UID int64  `json:"uid omitempty"`
+		UID int64  `json:"uid,omitempty"`
 		S   string `json:"s"`
 	}
 

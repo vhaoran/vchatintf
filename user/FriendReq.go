@@ -25,9 +25,9 @@ type (
 
 	//input data
 	FriendReqIn struct {
-		From int64  `json:"from omitempty"`
-		To   int64  `json:"to omitempty"`
-		Msg  string `json:"msg omitempty"`
+		From int64  `json:"from,omitempty"`
+		To   int64  `json:"to,omitempty"`
+		Msg  string `json:"msg,omitempty"`
 	}
 
 	//output data

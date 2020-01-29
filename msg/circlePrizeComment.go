@@ -30,9 +30,9 @@ type (
 	//todo
 	CirclePrizeIn struct {
 		//0 prize 1 comment
-		Action int                `json:"action omitempty"`
+		Action int                `json:"action,omitempty"`
 		ID     primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
-		Text   string             `json:"text omitempty"`
+		Text   string             `json:"text,omitempty"`
 		UID    int64              `json:"uid,omitempty"   bson:"uid,omitempty"`
 	}
 

@@ -25,9 +25,9 @@ type (
 
 	//input data
 	ChUserPwdIn struct {
-		UID    int64  `json:"uid omitempty"`
-		OldPwd string `json:"old_pwd omitempty"`
-		NewPwd string `json:"new_pwd omitempty"`
+		UID    int64  `json:"uid,omitempty"`
+		OldPwd string `json:"old_pwd,omitempty"`
+		NewPwd string `json:"new_pwd,omitempty"`
 	}
 
 	//output data

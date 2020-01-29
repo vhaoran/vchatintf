@@ -23,7 +23,7 @@ type (
 
 	//input data
 	NewGroupNIn struct {
-		Number string `json:"number omitempty"`
+		Number string `json:"number,omitempty"`
 	}
 
 	//output data

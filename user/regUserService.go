@@ -28,11 +28,11 @@ type (
 	//todo
 	RegUserIn struct {
 		UserCode   string `json:"user_code"`
-		Nick       string `json:"nick omitempty"`
-		Mobile     string `json:"mobile omitempty"`
-		Pwd        string `json:"pwd omitempty"`
-		ChartKey   string `json:"chart_key omitempty"`
-		ChartValue string `json:"chart_value omitempty"`
+		Nick       string `json:"nick,omitempty"`
+		Mobile     string `json:"mobile,omitempty"`
+		Pwd        string `json:"pwd,omitempty"`
+		ChartKey   string `json:"chart_key,omitempty"`
+		ChartValue string `json:"chart_value,omitempty"`
 	}
 
 	//output data

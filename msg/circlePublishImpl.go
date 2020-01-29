@@ -25,7 +25,7 @@ type (
 
 	//input data
 	CirclePublishIn struct {
-		UID  int64  `json:"uid omitempty"`
+		UID  int64  `json:"uid,omitempty"`
 		Text string `json:"text"`
 	}
 

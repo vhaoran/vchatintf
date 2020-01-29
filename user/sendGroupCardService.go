@@ -25,9 +25,9 @@ type (
 
 	//input data
 	SendGroupCardIn struct {
-		From int   `json:"from omitempty"`
-		To   int64 `json:"to omitempty"`
-		GID  int64 `json:"gid omitempty"`
+		From int   `json:"from,omitempty"`
+		To   int64 `json:"to,omitempty"`
+		GID  int64 `json:"gid,omitempty"`
 	}
 
 	//output data

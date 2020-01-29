@@ -25,7 +25,7 @@ type (
 
 	//input data
 	MobileExistIn struct {
-		Mobile string `json:"mobile omitempty"`
+		Mobile string `json:"mobile,omitempty"`
 	}
 
 	//output data

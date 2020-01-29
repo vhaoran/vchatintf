@@ -23,7 +23,7 @@ type (
 
 	//input data
 	NewGroupIn struct {
-		List []int64 `json:"list omitempty"`
+		List []int64 `json:"list,omitempty"`
 	}
 
 	//output data

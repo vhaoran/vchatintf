@@ -26,8 +26,8 @@ type (
 	//input data
 	CircleReplyIn struct {
 		ID   primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
-		From int64              `json:"from omitempty"`
-		To   int64              `json:"to omitempty"`
+		From int64              `json:"from,omitempty"`
+		To   int64              `json:"to,omitempty"`
 	}
 
 	// handler implements

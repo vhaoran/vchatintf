@@ -6,7 +6,7 @@ type GroupInfoRef struct {
 	Name string `json:"name,omitempty" gorm:"type:varchar(50);index"`
 
 	//图标
-	Icon string `json:"icon omitempty" gorm:"type:varchar(100)"`
+	Icon string `json:"icon,omitempty" gorm:"type:varchar(100)"`
 
 	//群主
 	OwnerID int64 `json:"owner_id,omitempty" gorm:"index"`

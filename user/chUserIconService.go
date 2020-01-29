@@ -25,8 +25,8 @@ type (
 
 	//input data
 	ChUserIconIn struct {
-		UID  int64  `json:"uid omitempty"`
-		Icon string `json:"icon omitempty"`
+		UID  int64  `json:"uid,omitempty"`
+		Icon string `json:"icon,omitempty"`
 	}
 
 	//output data

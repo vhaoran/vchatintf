@@ -24,7 +24,7 @@ type (
 
 	//input data
 	OnLineNotifyIn struct {
-		UID int64 `json:"uid omitempty"`
+		UID int64 `json:"uid,omitempty"`
 	}
 
 	//output data

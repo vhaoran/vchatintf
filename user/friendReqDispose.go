@@ -25,9 +25,9 @@ type (
 
 	//input data
 	FriendReqDisposeIn struct {
-		ReqID int64 `json:"req_id omitempty"`
+		ReqID int64 `json:"req_id,omitempty"`
 		// 1: agree -1:refuse  -100:blacklist
-		Action int `json:"action omitempty"`
+		Action int `json:"action,omitempty"`
 	}
 
 	//output data

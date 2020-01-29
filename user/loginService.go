@@ -30,9 +30,9 @@ type (
 		UserCode string `json:"user_code"`
 		//是否是手机号登录（为真值时，userCode代表手机号）
 		IsMobile   bool   `json:"is_mobile,omitempty"`
-		Pwd        string `json:"pwd omitempty"`
-		ChartKey   string `json:"chart_key omitempty"`
-		ChartValue string `json:"chart_value omitempty"`
+		Pwd        string `json:"pwd,omitempty"`
+		ChartKey   string `json:"chart_key,omitempty"`
+		ChartValue string `json:"chart_value,omitempty"`
 	}
 
 	//output data

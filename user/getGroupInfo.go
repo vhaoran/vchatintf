@@ -23,7 +23,7 @@ type (
 
 	//input data
 	GetGroupInfoIn struct {
-		GID int64 `json:"gid omitempty"`
+		GID int64 `json:"gid,omitempty"`
 	}
 
 	//output data

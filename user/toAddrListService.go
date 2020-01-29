@@ -25,8 +25,8 @@ type (
 
 	//input data
 	ToAddrListIn struct {
-		UID int64 `json:"uid omitempty"`
-		GID int64 `json:"gid omitempty"`
+		UID int64 `json:"uid,omitempty"`
+		GID int64 `json:"gid,omitempty"`
 	}
 
 	//output data
