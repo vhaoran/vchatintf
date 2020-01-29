@@ -1,4 +1,6 @@
-package inner
+package user
+
+//for snippet用于标准返回值的微服务接口
 
 //for snippet用于标准返回值的微服务接口
 
@@ -6,7 +8,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/vhaoran/vchatintf/msg/refmsg"
 	"net/http"
 	"sync"
 
@@ -14,20 +15,24 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
+
+	"github.com/vhaoran/vchatintf/user/refuser"
 )
 
 const (
-	NotifyMsgInner_HANDLER_PATH = "/NotifyMsgInner"
+	//
+	GetUserInfoInner_H_PATH = "/GetUserInfoInner"
 )
 
 type (
-	NotifyMsgInnerService interface {
-		Exec(in *NotifyMsgInnerIn) (*ykit.Result, error)
+	GetUserInfoInnerService interface {
+		Exec(in *GetUserInfoInnerIn) (*refuser.UserInfoRef, error)
 	}
 
 	//input data
-	NotifyMsgInnerIn struct {
-		refmsg.MsgHisRef
+	//
+	GetUserInfoInnerIn struct {
+		UID int64 `json:"uid,omitempty"`
 	}
 
 	//output data
@@ -38,29 +43,30 @@ type (
 	//}
 
 	// handler implements
-	NotifyMsgInnerH struct {
+	GetUserInfoInnerH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *NotifyMsgInnerH) MakeLocalEndpoint(svc NotifyMsgInnerService) endpoint.Endpoint {
+func (r *GetUserInfoInnerH) MakeLocalEndpoint(svc GetUserInfoInnerService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  NotifyMsgInner ###########")
+		fmt.Println("#############  GetUserInfoInner ###########")
 		spew.Dump(ctx)
 
-		in := request.(*NotifyMsgInnerIn)
+		//
+		in := request.(*GetUserInfoInnerIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *NotifyMsgInnerH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(NotifyMsgInnerIn), ctx, req)
+func (r *GetUserInfoInnerH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(GetUserInfoInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *NotifyMsgInnerH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
-	var response *ykit.Result
+func (r *GetUserInfoInnerH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+	var response *refuser.UserInfoRef
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
 	}
@@ -68,7 +74,7 @@ func (r *NotifyMsgInnerH) DecodeResponse(_ context.Context, res *http.Response) 
 }
 
 //handler for router，微服务本地接口，
-func (r *NotifyMsgInnerH) HandlerLocal(service NotifyMsgInnerService,
+func (r *GetUserInfoInnerH) HandlerLocal(service GetUserInfoInnerService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -87,39 +93,40 @@ func (r *NotifyMsgInnerH) HandlerLocal(service NotifyMsgInnerService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *NotifyMsgInnerH) HandlerSD(mid []endpoint.Middleware,
+func (r *GetUserInfoInnerH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
+		//
 		"POST",
-		NotifyMsgInner_HANDLER_PATH,
+		GetUserInfoInner_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *NotifyMsgInnerH) ProxySD() endpoint.Endpoint {
+func (r *GetUserInfoInnerH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		NotifyMsgInner_HANDLER_PATH,
+		GetUserInfoInner_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
 }
 
-//只用于内部调用 ，不从gateway调用
-var once_NotifyMsgInner sync.Once
-var local_NotifyMsgInner_EP endpoint.Endpoint
+//只用于内部调用 ，不从风头调用
+var once_GetUserInfoInner sync.Once
+var local_GetUserInfoInner_EP endpoint.Endpoint
 
-func (r *NotifyMsgInnerH) Call(in *NotifyMsgInnerIn) (*ykit.Result, error) {
-	once_NotifyMsgInner.Do(func() {
-		local_NotifyMsgInner_EP = new(NotifyMsgInnerH).ProxySD()
+func (r *GetUserInfoInnerH) Call(in GetUserInfoInnerIn) (*refuser.UserInfoRef, error) {
+	once_GetUserInfoInner.Do(func() {
+		local_GetUserInfoInner_EP = new(GetUserInfoInnerH).ProxySD()
 	})
 	//
-	ep := local_NotifyMsgInner_EP
+	ep := local_GetUserInfoInner_EP
 	//
 	result, err := ep(context.Background(), in)
 
@@ -127,5 +134,5 @@ func (r *NotifyMsgInnerH) Call(in *NotifyMsgInnerIn) (*ykit.Result, error) {
 		return nil, err
 	}
 
-	return result.(*ykit.Result), nil
+	return result.(*refuser.UserInfoRef), nil
 }

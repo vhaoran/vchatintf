@@ -1,4 +1,4 @@
-package inner
+package user
 
 import (
 	"github.com/vhaoran/vchat/lib"

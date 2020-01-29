@@ -1,3 +1,3 @@
-package inner
+package user
 
 const MSTAG = "user"

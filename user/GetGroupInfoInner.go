@@ -1,4 +1,4 @@
-package inner
+package user
 
 //for snippet用于标准返回值的微服务接口
 

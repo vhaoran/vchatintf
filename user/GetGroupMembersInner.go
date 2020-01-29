@@ -1,8 +1,9 @@
-package inner
+package user
 
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"sync"
 
@@ -10,25 +11,24 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
-	"github.com/vhaoran/vchat/lib/ylog"
 )
 
 const (
-	GetBuSubsInner_H_PATH = "/GetBulletinSubsInner"
+	GetGroupMembersInner_H_PATH = "/GetGroupMembersInner"
 )
 
 type (
-	GetBuSubsInnerService interface {
-		Exec(in *GetBuSubsInnerIn) ([]*GetBuSubsInnerOut, error)
+	GetGroupMembersInnerService interface {
+		Exec(in *GetGroupMembersInnerIn) ([]*GetGroupMembersInnerOut, error)
 	}
 
 	//input data
-	GetBuSubsInnerIn struct {
-		BID int64 `json:"bid,omitempty"`
+	GetGroupMembersInnerIn struct {
+		GID int64 `json:"gid,omitempty"`
 	}
 
 	//output data
-	GetBuSubsInnerOut struct {
+	GetGroupMembersInnerOut struct {
 		UID int64 `json:"uid,omitempty"`
 		//冗余字段，提升性能,用户帐号
 		UserCodeRef string `json:"user_code_ref,omitempty"`
@@ -39,29 +39,29 @@ type (
 	}
 
 	// handler implements
-	GetBuSubsInnerH struct {
+	GetGroupMembersInnerH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *GetBuSubsInnerH) MakeLocalEndpoint(svc GetBuSubsInnerService) endpoint.Endpoint {
+func (r *GetGroupMembersInnerH) MakeLocalEndpoint(svc GetGroupMembersInnerService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		ylog.Debug("#############  GetBulletinSubsInner ###########")
+		fmt.Println("#############  GetGroupMembersInner ###########")
 		spew.Dump(ctx)
 
-		in := request.(*GetBuSubsInnerIn)
+		in := request.(*GetGroupMembersInnerIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *GetBuSubsInnerH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(GetBuSubsInnerIn), ctx, req)
+func (r *GetGroupMembersInnerH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(GetGroupMembersInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *GetBuSubsInnerH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
-	var response []*GetBuSubsInnerOut
+func (r *GetGroupMembersInnerH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+	var response []*GetGroupMembersInnerOut
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (r *GetBuSubsInnerH) DecodeResponse(_ context.Context, res *http.Response) 
 }
 
 //handler for router，微服务本地接口，
-func (r *GetBuSubsInnerH) HandlerLocal(service GetBuSubsInnerService,
+func (r *GetGroupMembersInnerH) HandlerLocal(service GetGroupMembersInnerService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -88,39 +88,39 @@ func (r *GetBuSubsInnerH) HandlerLocal(service GetBuSubsInnerService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *GetBuSubsInnerH) HandlerSD(mid []endpoint.Middleware,
+func (r *GetGroupMembersInnerH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		GetBuSubsInner_H_PATH,
+		GetGroupMembersInner_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *GetBuSubsInnerH) ProxySD() endpoint.Endpoint {
+func (r *GetGroupMembersInnerH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		GetBuSubsInner_H_PATH,
+		GetGroupMembersInner_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
 }
 
 //只用于内部调用 ，不从风头调用
-var once_GetBulletinSubsInner sync.Once
-var local_GetBulletinSubsInner_EP endpoint.Endpoint
+var once_GetGroupMembersInner sync.Once
+var local_GetGroupMembersInner_EP endpoint.Endpoint
 
-func (r *GetBuSubsInnerH) Call(in *GetBuSubsInnerIn) ([]*GetBuSubsInnerOut, error) {
-	once_GetBulletinSubsInner.Do(func() {
-		local_GetBulletinSubsInner_EP = new(GetBuSubsInnerH).ProxySD()
+func (r *GetGroupMembersInnerH) Call(in *GetGroupMembersInnerIn) ([]*GetGroupMembersInnerOut, error) {
+	once_GetGroupMembersInner.Do(func() {
+		local_GetGroupMembersInner_EP = new(GetGroupMembersInnerH).ProxySD()
 	})
 	//
-	ep := local_GetBulletinSubsInner_EP
+	ep := local_GetGroupMembersInner_EP
 	//
 	result, err := ep(context.Background(), in)
 
@@ -128,5 +128,5 @@ func (r *GetBuSubsInnerH) Call(in *GetBuSubsInnerIn) ([]*GetBuSubsInnerOut, erro
 		return nil, err
 	}
 
-	return result.([]*GetBuSubsInnerOut), nil
+	return result.([]*GetGroupMembersInnerOut), nil
 }

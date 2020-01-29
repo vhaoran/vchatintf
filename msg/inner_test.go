@@ -1,4 +1,4 @@
-package inner
+package msg
 
 import (
 	"github.com/vhaoran/vchat/common/ytime"
