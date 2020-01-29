@@ -16,7 +16,6 @@ import (
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
 
-	"github.com/vhaoran/vchatintf/user"
 	"github.com/vhaoran/vchatintf/user/refuser"
 )
 
@@ -98,7 +97,7 @@ func (r *GetUserInfoInnerH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
-		intf.MSTAG,
+		MSTAG,
 		//
 		"POST",
 		GetUserInfoInner_H_PATH,

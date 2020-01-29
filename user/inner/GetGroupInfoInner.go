@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/vhaoran/vchat/demo/unit/intf"
 	"net/http"
 	"sync"
 
@@ -16,7 +17,6 @@ import (
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
 
-	"github.com/vhaoran/vchatintf/user"
 	"github.com/vhaoran/vchatintf/user/refuser"
 )
 
