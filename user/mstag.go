@@ -1,3 +1,3 @@
-package intf
+package user
 
 const MSTAG = "user"

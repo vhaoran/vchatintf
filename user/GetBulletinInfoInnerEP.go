@@ -1,4 +1,4 @@
-package inner
+package user
 
 //for snippet用于标准返回值的微服务接口
 
@@ -6,7 +6,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/vhaoran/vchatintf/msg/refmsg"
 	"net/http"
 	"sync"
 
@@ -14,20 +13,22 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
+
+	"github.com/vhaoran/vchatintf/user/refuser"
 )
 
 const (
-	NotifyMsgInner_HANDLER_PATH = "/NotifyMsgInner"
+	GetBuInfoInner_H_PATH = "/GetBulletinInfoInner"
 )
 
 type (
-	NotifyMsgInnerService interface {
-		Exec(in *NotifyMsgInnerIn) (*ykit.Result, error)
+	GetBuInfoInnerService interface {
+		Exec(in *GetBuInfoInnerIn) (*refuser.BulletinInfoRef, error)
 	}
 
 	//input data
-	NotifyMsgInnerIn struct {
-		refmsg.MsgHisRef
+	GetBuInfoInnerIn struct {
+		BID int64 `json:"bid,omitempty"`
 	}
 
 	//output data
@@ -38,29 +39,29 @@ type (
 	//}
 
 	// handler implements
-	NotifyMsgInnerHandler struct {
+	GetBuInfoInnerH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *NotifyMsgInnerHandler) MakeLocalEndpoint(svc NotifyMsgInnerService) endpoint.Endpoint {
+func (r *GetBuInfoInnerH) MakeLocalEndpoint(svc GetBuInfoInnerService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  NotifyMsgInner ###########")
+		fmt.Println("#############  GetBulletinInfoRef ###########")
 		spew.Dump(ctx)
 
-		in := request.(*NotifyMsgInnerIn)
+		in := request.(*GetBuInfoInnerIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *NotifyMsgInnerHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(NotifyMsgInnerIn), ctx, req)
+func (r *GetBuInfoInnerH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(GetBuInfoInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *NotifyMsgInnerHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
-	var response ykit.Result
+func (r *GetBuInfoInnerH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+	var response *refuser.BulletinInfoRef
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
 	}
@@ -68,7 +69,7 @@ func (r *NotifyMsgInnerHandler) DecodeResponse(_ context.Context, res *http.Resp
 }
 
 //handler for router，微服务本地接口，
-func (r *NotifyMsgInnerHandler) HandlerLocal(service NotifyMsgInnerService,
+func (r *GetBuInfoInnerH) HandlerLocal(service GetBuInfoInnerService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -87,39 +88,49 @@ func (r *NotifyMsgInnerHandler) HandlerLocal(service NotifyMsgInnerService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *NotifyMsgInnerHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *GetBuInfoInnerH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		NotifyMsgInner_HANDLER_PATH,
+		GetBuInfoInner_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *NotifyMsgInnerHandler) ProxySD() endpoint.Endpoint {
+//func (r *GetBuInfoInnerH) ProxySD() endpoint.Endpoint {
+//	return r.base.ProxyEndpointSD(
+//		context.Background(),
+//		MSTAG,
+//		"POST",
+//		GetBuInfoInner_H_PATH,
+//		r.DecodeRequest,
+//		r.DecodeResponse)
+//}
+
+func (r *GetBuInfoInnerH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		NotifyMsgInner_HANDLER_PATH,
+		GetBuInfoInner_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
 }
 
 //只用于内部调用 ，不从风头调用
-var once_NotifyMsgInner sync.Once
-var local_NotifyMsgInner_EP endpoint.Endpoint
+var once_GetBulletinInfoInner sync.Once
+var local_GetBulletinInfoInner_EP endpoint.Endpoint
 
-func (r *NotifyMsgInnerHandler) Call(in NotifyMsgInnerIn) (*ykit.Result, error) {
-	once_NotifyMsgInner.Do(func() {
-		local_NotifyMsgInner_EP = new(NotifyMsgInnerHandler).ProxySD()
+func (r *GetBuInfoInnerH) Call(in *GetBuInfoInnerIn) (*refuser.BulletinInfoRef, error) {
+	once_GetBulletinInfoInner.Do(func() {
+		local_GetBulletinInfoInner_EP = new(GetBuInfoInnerH).ProxySD()
 	})
 	//
-	ep := local_NotifyMsgInner_EP
+	ep := local_GetBulletinInfoInner_EP
 	//
 	result, err := ep(context.Background(), in)
 
@@ -127,5 +138,5 @@ func (r *NotifyMsgInnerHandler) Call(in NotifyMsgInnerIn) (*ykit.Result, error) 
 		return nil, err
 	}
 
-	return result.(*ykit.Result), nil
+	return result.(*refuser.BulletinInfoRef), nil
 }

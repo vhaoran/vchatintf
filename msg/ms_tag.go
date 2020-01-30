@@ -1,4 +1,4 @@
-package inner
+package msg
 
 // avoid package ref circle
 const MSTAG = "msg"

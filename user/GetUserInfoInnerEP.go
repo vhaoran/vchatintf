@@ -1,4 +1,4 @@
-package inner
+package user
 
 //for snippet用于标准返回值的微服务接口
 
@@ -16,13 +16,12 @@ import (
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
 
-	"github.com/vhaoran/vchatintf/user"
 	"github.com/vhaoran/vchatintf/user/refuser"
 )
 
 const (
 	//
-	GetUserInfoInner_HANDLER_PATH = "/GetUserInfoInner"
+	GetUserInfoInner_H_PATH = "/GetUserInfoInner"
 )
 
 type (
@@ -44,12 +43,12 @@ type (
 	//}
 
 	// handler implements
-	GetUserInfoInnerHandler struct {
+	GetUserInfoInnerH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *GetUserInfoInnerHandler) MakeLocalEndpoint(svc GetUserInfoInnerService) endpoint.Endpoint {
+func (r *GetUserInfoInnerH) MakeLocalEndpoint(svc GetUserInfoInnerService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		fmt.Println("#############  GetUserInfoInner ###########")
 		spew.Dump(ctx)
@@ -61,12 +60,12 @@ func (r *GetUserInfoInnerHandler) MakeLocalEndpoint(svc GetUserInfoInnerService)
 }
 
 //个人实现,参数不能修改
-func (r *GetUserInfoInnerHandler) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+func (r *GetUserInfoInnerH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
 	return r.base.DecodeRequest(new(GetUserInfoInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *GetUserInfoInnerHandler) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+func (r *GetUserInfoInnerH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
 	var response *refuser.UserInfoRef
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
@@ -75,7 +74,7 @@ func (r *GetUserInfoInnerHandler) DecodeResponse(_ context.Context, res *http.Re
 }
 
 //handler for router，微服务本地接口，
-func (r *GetUserInfoInnerHandler) HandlerLocal(service GetUserInfoInnerService,
+func (r *GetUserInfoInnerH) HandlerLocal(service GetUserInfoInnerService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -94,26 +93,26 @@ func (r *GetUserInfoInnerHandler) HandlerLocal(service GetUserInfoInnerService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *GetUserInfoInnerHandler) HandlerSD(mid []endpoint.Middleware,
+func (r *GetUserInfoInnerH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
-		intf.MSTAG,
+		MSTAG,
 		//
 		"POST",
-		GetUserInfoInner_HANDLER_PATH,
+		GetUserInfoInner_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *GetUserInfoInnerHandler) ProxySD() endpoint.Endpoint {
+func (r *GetUserInfoInnerH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		GetUserInfoInner_HANDLER_PATH,
+		GetUserInfoInner_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
 }
@@ -122,9 +121,9 @@ func (r *GetUserInfoInnerHandler) ProxySD() endpoint.Endpoint {
 var once_GetUserInfoInner sync.Once
 var local_GetUserInfoInner_EP endpoint.Endpoint
 
-func (r *GetUserInfoInnerHandler) Call(in *GetUserInfoInnerIn) (*refuser.UserInfoRef, error) {
+func (r *GetUserInfoInnerH) Call(in GetUserInfoInnerIn) (*refuser.UserInfoRef, error) {
 	once_GetUserInfoInner.Do(func() {
-		local_GetUserInfoInner_EP = new(GetUserInfoInnerHandler).ProxySD()
+		local_GetUserInfoInner_EP = new(GetUserInfoInnerH).ProxySD()
 	})
 	//
 	ep := local_GetUserInfoInner_EP
