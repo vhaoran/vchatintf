@@ -1,9 +1,10 @@
-package util
+package mobileMsgs
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/vhaoran/vchatintf/util"
 	"net/http"
 	"sync"
 
@@ -24,6 +25,8 @@ type (
 
 	//input data
 	MobileMsgInnerIn struct {
+		//
+		Action int    `json:"action,omitempty"`
 		Mobile string `json:"mobile,omitempty"`
 		Text   string `json:"text,omitempty"`
 	}
@@ -89,7 +92,7 @@ func (r *MobileMsgInnerH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
-		MSTAG,
+		util.MSTAG,
 		"POST",
 		MobileMsgInner_H_PATH,
 		r.DecodeRequest,
@@ -101,7 +104,7 @@ func (r *MobileMsgInnerH) HandlerSD(mid []endpoint.Middleware,
 func (r *MobileMsgInnerH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
-		MSTAG,
+		util.MSTAG,
 		"POST",
 		MobileMsgInner_H_PATH,
 		r.DecodeRequest,
