@@ -34,6 +34,8 @@ type CircleRef struct {
 //}
 
 type CircleCommentRef struct {
+	//0 : prize 1: comment 2:reply
+
 	Action    int        `json:"action,omitempty"   bson:"action,omitempty"`
 	CreatedAt ytime.Date `json:"created_at,omitempty"   bson:"created_at,omitempty"`
 
