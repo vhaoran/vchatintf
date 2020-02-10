@@ -7,8 +7,6 @@ const (
 	//普通文本消息
 	BT_COMMON = iota + 1
 	//
-	//2	普通文本消息
-	BT_TEXT
 
 	//2	图片
 	BT_IMAGE

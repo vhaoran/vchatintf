@@ -35,4 +35,11 @@ type BuCntRef struct {
 	Footer interface{} `json:"footer,omitempty"   bson:"footer,omitempty"`
 	//total push count
 	TotalPushCount int64 `json:"total_push_count,omitempty"   bson:"total_push_count,omitempty"`
+
+	//from
+	From int64 `json:"from,omitempty"   bson:"from,omitempty"`
+	FUserCode string `json:"f_user_code,omitempty"   bson:"f_user_code,omitempty"`
+	FIcon string `json:"f_icon,omitempty"   bson:"f_icon,omitempty"`
+	FNick string `json:"f_nick,omitempty"   bson:"f_nick,omitempty"`
+
 }
