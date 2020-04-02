@@ -3,9 +3,9 @@ package refmsg
 type CircleCoverRef struct {
 	//用户id
 	UID         int64
-	UserCodeRef string `json:"user_code,omitempty"   bson:"user_code,omitempty"`
-	NickRef     string `json:"nick,omitempty"   bson:"nick,omitempty"`
-	IconRef     string `json:"icon,omitempty"   bson:"icon,omitempty"`
+	UserCodeRef string `json:"user_code"   bson:"user_code"`
+	NickRef     string `json:"nick"   bson:"nick"`
+	IconRef     string `json:"icon"   bson:"icon"`
 
-	CoverPath string `json:"cover_path,omitempty"   bson:"cover_path,omitempty"`
+	CoverPath string `json:"cover_path"   bson:"cover_path"`
 }

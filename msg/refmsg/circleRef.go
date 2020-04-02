@@ -7,44 +7,44 @@ import (
 )
 
 type CircleRef struct {
-	ID primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
+	ID primitive.ObjectID `json:"id"   bson:"_id"`
 	// 发布时间
-	CreatedAt ytime.Date `json:"created_at,omitempty"   bson:"created_at,omitempty"`
-	Created   time.Time  `json:"created,omitempty"   bson:"created,omitempty"`
+	CreatedAt ytime.Date `json:"created_at"   bson:"created_at"`
+	Created   time.Time  `json:"created"   bson:"created"`
 
-	UID         int64  `json:"uid,omitempty"   bson:"uid,omitempty"`
-	UserCodeRef string `json:"user_code ,omitempty"   bson:"user_code ,omitempty"`
-	NickRef     string `json:"nick ,omitempty"   bson:"nick ,omitempty"`
-	IconRef     string `json:"icon ,omitempty"   bson:"icon ,omitempty"`
+	UID         int64  `json:"uid"   bson:"uid"`
+	UserCodeRef string `json:"user_code "   bson:"user_code "`
+	NickRef     string `json:"nick "   bson:"nick "`
+	IconRef     string `json:"icon "   bson:"icon "`
 
-	Content interface{} `json:"content,omitempty"   bson:"content,omitempty"`
+	Content interface{} `json:"content"   bson:"content"`
 	//回复及点赞
-	//	Prize   []CirclePrizeRef   `json:"prize,omitempty"   bson:"prize,omitempty"`
-	Comment []CircleCommentRef `json:"reply,omitempty"   bson:"reply,omitempty"`
+	//	Prize   []CirclePrizeRef   `json:"prize"   bson:"prize"`
+	Comment []CircleCommentRef `json:"reply"   bson:"reply"`
 }
 
 //type CirclePrizeRef struct {
-//	CreatedAt ytime.Date `json:"created_at,omitempty"   bson:"created_at,omitempty"`
+//	CreatedAt ytime.Date `json:"created_at"   bson:"created_at"`
 //
-//	OfUID int64 `json:"Of_uid,omitempty"   bson:"Of_uid,omitempty"`
+//	OfUID int64 `json:"Of_uid"   bson:"Of_uid"`
 //
-//	UserCodeRef string `json:"user_code ,omitempty"   bson:"user_code ,omitempty"`
-//	NickRef     string `json:"nick ,omitempty"   bson:"nick ,omitempty"`
-//	IconRef     string `json:"icon ,omitempty"   bson:"icon ,omitempty"`
+//	UserCodeRef string `json:"user_code "   bson:"user_code "`
+//	NickRef     string `json:"nick "   bson:"nick "`
+//	IconRef     string `json:"icon "   bson:"icon "`
 //}
 
 type CircleCommentRef struct {
 	//0 : prize 1: comment 2:reply
 
-	Action    int        `json:"action,omitempty"   bson:"action,omitempty"`
-	CreatedAt ytime.Date `json:"created_at,omitempty"   bson:"created_at,omitempty"`
+	Action    int        `json:"action"   bson:"action"`
+	CreatedAt ytime.Date `json:"created_at"   bson:"created_at"`
 
 	//评论人
-	OfUID int64 `json:"Of_uid,omitempty"   bson:"Of_uid,omitempty"`
+	OfUID int64 `json:"Of_uid"   bson:"Of_uid"`
 
-	UserCodeRef string `json:"user_code ,omitempty"   bson:"user_code ,omitempty"`
-	NickRef     string `json:"nick ,omitempty"   bson:"nick ,omitempty"`
-	IconRef     string `json:"icon ,omitempty"   bson:"icon ,omitempty"`
+	UserCodeRef string `json:"user_code"   bson:"user_code "`
+	NickRef     string `json:"nick"   bson:"nick "`
+	IconRef     string `json:"icon"   bson:"icon "`
 
-	Text string `json:"content,omitempty"   bson:"content,omitempty"`
+	Text string `json:"content"   bson:"content"`
 }

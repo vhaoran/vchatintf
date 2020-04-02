@@ -7,39 +7,39 @@ import (
 )
 
 type BuCntRef struct {
-	ID        primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
-	CreatedAt ytime.Date         `json:"created_at,omitempty"   bson:"created_at,omitempty"`
-	Created   time.Time `json:"created,omitempty"   bson:"created,omitempty"`
+	ID        primitive.ObjectID `json:"id"   bson:"_id"`
+	CreatedAt ytime.Date         `json:"created_at"   bson:"created_at"`
+	Created   time.Time `json:"created"   bson:"created"`
 
 	// 公众号id
-	BID   int64  `json:"bid,omitempty"   bson:"bid,omitempty"`
-	BName string `json:"b_name,omitempty"   bson:"b_name,omitempty"`
+	BID   int64  `json:"bid"   bson:"bid"`
+	BName string `json:"b_name"   bson:"b_name"`
 
 	//图标
-	BIcon string `json:"b_icon,omitempty"   bson:"b_icon,omitempty"`
+	BIcon string `json:"b_icon"   bson:"b_icon"`
 
 	// 页眉 可以是有格式内容
-	Header interface{} `json:"header,omitempty"   bson:"header,omitempty"`
+	Header interface{} `json:"header"   bson:"header"`
 
 	//标题    可以是有格式内容
-	Title interface{} `json:"title,omitempty"   bson:"title,omitempty"`
+	Title interface{} `json:"title"   bson:"title"`
 	//副标题	可以是有格式内容
-	Title1 interface{} `json:"title_1,omitempty"   bson:"title_1,omitempty"`
+	Title1 interface{} `json:"title_1"   bson:"title_1"`
 	//  摘要(显示在推送区域)		可以是有格式内容
-	Brief interface{} `json:"brief,omitempty"   bson:"brief,omitempty"`
+	Brief interface{} `json:"brief"   bson:"brief"`
 	//  内容
-	Content interface{} `json:"content,omitempty"   bson:"content,omitempty"`
+	Content interface{} `json:"content"   bson:"content"`
 	// 回复及点赞
-	Reply interface{} `json:"reply,omitempty"   bson:"reply,omitempty"`
+	Reply interface{} `json:"reply"   bson:"reply"`
 	// 页脚
-	Footer interface{} `json:"footer,omitempty"   bson:"footer,omitempty"`
+	Footer interface{} `json:"footer"   bson:"footer"`
 	//total push count
-	TotalPushCount int64 `json:"total_push_count,omitempty"   bson:"total_push_count,omitempty"`
+	TotalPushCount int64 `json:"total_push_count"   bson:"total_push_count"`
 
 	//from
-	From int64 `json:"from,omitempty"   bson:"from,omitempty"`
-	FUserCode string `json:"f_user_code,omitempty"   bson:"f_user_code,omitempty"`
-	FIcon string `json:"f_icon,omitempty"   bson:"f_icon,omitempty"`
-	FNick string `json:"f_nick,omitempty"   bson:"f_nick,omitempty"`
+	From int64 `json:"from"   bson:"from"`
+	FUserCode string `json:"f_user_code"   bson:"f_user_code"`
+	FIcon string `json:"f_icon"   bson:"f_icon"`
+	FNick string `json:"f_nick"   bson:"f_nick"`
 
 }
