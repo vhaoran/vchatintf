@@ -6,9 +6,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/vhaoran/vchatintf/msg/refmsg"
 	"net/http"
 	"sync"
+
+	"github.com/vhaoran/vchatintf/msg/refmsg"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kit/kit/endpoint"
@@ -124,7 +125,7 @@ func (r *NotifyMsgInnerH) Call(in *NotifyMsgInnerIn) (*ykit.Result, error) {
 	result, err := ep(context.Background(), in)
 
 	if err != nil {
-		return nil, err
+		return ykit.RErr(err), nil
 	}
 
 	return result.(*ykit.Result), nil
