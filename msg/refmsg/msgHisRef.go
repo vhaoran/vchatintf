@@ -3,13 +3,12 @@ package refmsg
 import (
 	"github.com/vhaoran/vchat/common/ytime"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"time"
 )
 
 type MsgHisRef struct {
 	ID        primitive.ObjectID `json:"id"   bson:"_id"`
 	CreatedAt ytime.Date         `json:"created_at"   bson:"created_at"`
-	Created   time.Time `json:"created"   bson:"created"`
+	Created   int64              `json:"created"   bson:"created"`
 
 	//1: 私信消息 群消息
 	//2：

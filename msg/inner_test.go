@@ -1,11 +1,13 @@
 package msg
 
 import (
-	"github.com/vhaoran/vchat/common/ytime"
-	"github.com/vhaoran/vchat/lib"
-	"github.com/vhaoran/vchatintf/msg/refmsg"
 	"log"
 	"testing"
+
+	"github.com/vhaoran/vchat/common/ytime"
+	"github.com/vhaoran/vchat/lib"
+
+	"github.com/vhaoran/vchatintf/msg/refmsg"
 )
 
 func init() {
@@ -28,7 +30,7 @@ func Test_NotifyMsgInner(t *testing.T) {
 	in := &NotifyMsgInnerIn{
 		MsgHisRef: refmsg.MsgHisRef{
 			CreatedAt:       ytime.OfNow(),
-			Created:         ytime.OfNow().Time,
+			Created:         ytime.OfNow().Time.UnixNano(),
 			MsgType:         1,
 			FromUID:         1,
 			FromUserCodeRef: "",
