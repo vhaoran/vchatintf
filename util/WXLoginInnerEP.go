@@ -28,7 +28,7 @@ type (
 
 	//input  data
 	WXLoginInnerIn struct {
-		SS int64 `json:"SS"`
+		Code int64 `json:"code"`
 	}
 
 	//output data
