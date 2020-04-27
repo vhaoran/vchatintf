@@ -12,8 +12,6 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
-
-	"github.com/vhaoran/vchatintf/util/wx"
 )
 
 const (
@@ -120,7 +118,7 @@ func (r *WXLoginInnerH) ProxySD() endpoint.Endpoint {
 var once_WXLoginInner sync.Once
 var local_WXLoginInner_EP endpoint.Endpoint
 
-func (r *WXLoginInnerH) Call(in WXLoginInnerIn) (*wx.WxUserInfoRef, error) {
+func (r *WXLoginInnerH) Call(in WXLoginInnerIn) (*ykit.Result, error) {
 	once_WXLoginInner.Do(func() {
 		local_WXLoginInner_EP = new(WXLoginInnerH).ProxySD()
 	})
@@ -133,5 +131,5 @@ func (r *WXLoginInnerH) Call(in WXLoginInnerIn) (*wx.WxUserInfoRef, error) {
 		return nil, err
 	}
 
-	return result.(*ykit.Result).Data.(*wx.WxUserInfoRef), nil
+	return result.(*ykit.Result), nil
 }
