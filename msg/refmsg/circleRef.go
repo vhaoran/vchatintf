@@ -1,13 +1,15 @@
 package refmsg
 
 import (
+	"time"
+
 	"github.com/vhaoran/vchat/common/ytime"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"time"
 )
 
 type CircleRef struct {
-	ID primitive.ObjectID `json:"id"   bson:"_id"`
+	ID primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
+
 	// 发布时间
 	CreatedAt ytime.Date `json:"created_at"   bson:"created_at"`
 	Created   time.Time  `json:"created"   bson:"created"`
