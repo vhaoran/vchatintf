@@ -4,11 +4,11 @@ package refuser
 type UserInfoRef struct {
 	ID int64 `json:"id"`
 	//帐号	登录依据，建议用手机号
-	UserCode string `json:"user_code" gorm:"index:user_info_multi_code_mobile;type:varchar(50);not null;unique_index;"`
+	UserCode string `json:"user_code" gorm:"index:user_info_multi_code_mobile;type:varchar(100);not null;unique_index;"`
 	//眤称
 	Nick string `json:"nick" gorm:"type:varchar(50)"`
 	//头像
-	Icon string `json:"icon" gorm:"type:varchar(100)"`
+	Icon string `json:"icon" gorm:"type:varchar(300)"`
 	//手机号 登录依据
 	Mobile string `json:"mobile" gorm:"index:user_info_multi_code_mobile;type:varchar(50);not null;"`
 	//缺省手机登录帐号
