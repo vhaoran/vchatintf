@@ -6,7 +6,7 @@ import (
 )
 
 type MsgHisRef struct {
-	ID        primitive.ObjectID `json:"id"   bson:"_id"`
+	ID        primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
 	CreatedAt ytime.Date         `json:"created_at"   bson:"created_at"`
 	Created   int64              `json:"created"   bson:"created"`
 

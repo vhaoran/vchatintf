@@ -7,7 +7,7 @@ import (
 )
 
 type BuCntRef struct {
-	ID        primitive.ObjectID `json:"id"   bson:"_id"`
+	ID        primitive.ObjectID `json:"id,omitempty"   bson:"_id,omitempty"`
 	CreatedAt ytime.Date         `json:"created_at"   bson:"created_at"`
 	Created   time.Time `json:"created"   bson:"created"`
 
