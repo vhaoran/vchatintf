@@ -22,7 +22,7 @@ type CircleRef struct {
 	Content interface{} `json:"content"   bson:"content"`
 	//回复及点赞
 	//	Prize   []CirclePrizeRef   `json:"prize"   bson:"prize"`
-	Comment []CircleCommentRef `json:"reply"   bson:"reply"`
+	Comment []CircleCommentRef `json:"comment"   bson:"comment"`
 }
 
 //type CirclePrizeRef struct {
