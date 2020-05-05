@@ -42,11 +42,11 @@ type CircleCommentRef struct {
 	CreatedAt ytime.Date `json:"created_at"   bson:"created_at"`
 
 	//评论人
-	OfUID int64 `json:"Of_uid"   bson:"Of_uid"`
+	OfUID int64 `json:"of_uid"   bson:"of_uid"`
 
-	UserCodeRef string `json:"user_code"   bson:"user_code "`
-	NickRef     string `json:"nick"   bson:"nick "`
-	IconRef     string `json:"icon"   bson:"icon "`
+	UserCodeRef string `json:"user_code"   bson:"user_code"`
+	NickRef     string `json:"nick"   bson:"nick"`
+	IconRef     string `json:"icon"   bson:"icon"`
 
-	Text string `json:"content"   bson:"content"`
+	Content string `json:"content"   bson:"content"`
 }
