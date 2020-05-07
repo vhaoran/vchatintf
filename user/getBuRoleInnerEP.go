@@ -11,52 +11,53 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	tran "github.com/go-kit/kit/transport/http"
 	"github.com/vhaoran/vchat/lib/ykit"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 const (
-	GetBuRole_H_PATH = "/GetBuRole"
+	GetBuRoleInner_H_PATH = "/GetBuRoleInner"
 )
 
 type (
-	GetBuRoleService interface {
-		Exec(in *GetBuRoleIn) (*GetBuRoleOut, error)
+	GetBuRoleInnerService interface {
+		Exec(in *GetBuRoleInnerIn) (*GetBuRoleInnerOut, error)
 	}
 
 	//input data
-	GetBuRoleIn struct {
-		ID primitive.ObjectID `json:"id"   bson:"_id"`
+	GetBuRoleInnerIn struct {
+		BID int64 `json:"bid"`
+		UID int64 `json:"uid"`
 	}
 
 	//output data
-	GetBuRoleOut struct {
-		RoleName string `json:"role_name"`
+	GetBuRoleInnerOut struct {
+		IsManager bool `json:"is_manager"`
+		IsOwner   bool `json:"is_owner"`
 	}
 
 	// handler implements
-	GetBuRoleH struct {
+	GetBuRoleInnerH struct {
 		base ykit.RootTran
 	}
 )
 
-func (r *GetBuRoleH) MakeLocalEndpoint(svc GetBuRoleService) endpoint.Endpoint {
+func (r *GetBuRoleInnerH) MakeLocalEndpoint(svc GetBuRoleInnerService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		fmt.Println("#############  GetBuRole ###########")
+		fmt.Println("#############  GetBuRoleInner ###########")
 		spew.Dump(ctx)
 
-		in := request.(*GetBuRoleIn)
+		in := request.(*GetBuRoleInnerIn)
 		return svc.Exec(in)
 	}
 }
 
 //个人实现,参数不能修改
-func (r *GetBuRoleH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
-	return r.base.DecodeRequest(new(GetBuRoleIn), ctx, req)
+func (r *GetBuRoleInnerH) DecodeRequest(ctx context.Context, req *http.Request) (interface{}, error) {
+	return r.base.DecodeRequest(new(GetBuRoleInnerIn), ctx, req)
 }
 
 //个人实现,参数不能修改
-func (r *GetBuRoleH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
-	var response *GetBuRoleOut
+func (r *GetBuRoleInnerH) DecodeResponse(_ context.Context, res *http.Response) (interface{}, error) {
+	var response *GetBuRoleInnerOut
 	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 		return nil, err
 	}
@@ -64,7 +65,7 @@ func (r *GetBuRoleH) DecodeResponse(_ context.Context, res *http.Response) (inte
 }
 
 //handler for router，微服务本地接口，
-func (r *GetBuRoleH) HandlerLocal(service GetBuRoleService,
+func (r *GetBuRoleInnerH) HandlerLocal(service GetBuRoleInnerService,
 	mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 
@@ -83,39 +84,39 @@ func (r *GetBuRoleH) HandlerLocal(service GetBuRoleService,
 }
 
 //sd,proxy实现,用于etcd自动服务发现时的handler
-func (r *GetBuRoleH) HandlerSD(mid []endpoint.Middleware,
+func (r *GetBuRoleInnerH) HandlerSD(mid []endpoint.Middleware,
 	options ...tran.ServerOption) *tran.Server {
 	return r.base.HandlerSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		GetBuRole_H_PATH,
+		GetBuRoleInner_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse,
 		mid,
 		options...)
 }
 
-func (r *GetBuRoleH) ProxySD() endpoint.Endpoint {
+func (r *GetBuRoleInnerH) ProxySD() endpoint.Endpoint {
 	return r.base.ProxyEndpointSD(
 		context.Background(),
 		MSTAG,
 		"POST",
-		GetBuRole_H_PATH,
+		GetBuRoleInner_H_PATH,
 		r.DecodeRequest,
 		r.DecodeResponse)
 }
 
 //只用于内部调用 ，不从风头调用
-var once_GetBuRole sync.Once
-var local_GetBuRole_EP endpoint.Endpoint
+var once_GetBuRoleInner sync.Once
+var local_GetBuRoleInner_EP endpoint.Endpoint
 
-func (r *GetBuRoleH) Call(in *GetBuRoleIn) (*GetBuRoleOut, error) {
-	once_GetBuRole.Do(func() {
-		local_GetBuRole_EP = new(GetBuRoleH).ProxySD()
+func (r *GetBuRoleInnerH) Call(in *GetBuRoleInnerIn) ([]*GetBuRoleInnerOut, error) {
+	once_GetBuRoleInner.Do(func() {
+		local_GetBuRoleInner_EP = new(GetBuRoleInnerH).ProxySD()
 	})
 	//
-	ep := local_GetBuRole_EP
+	ep := local_GetBuRoleInner_EP
 	//
 	result, err := ep(context.Background(), in)
 
@@ -123,5 +124,5 @@ func (r *GetBuRoleH) Call(in *GetBuRoleIn) (*GetBuRoleOut, error) {
 		return nil, err
 	}
 
-	return result.(*GetBuRoleOut), nil
+	return result.([]*GetBuRoleInnerOut), nil
 }
