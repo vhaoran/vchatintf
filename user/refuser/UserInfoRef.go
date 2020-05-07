@@ -4,18 +4,18 @@ package refuser
 type UserInfoRef struct {
 	ID int64 `json:"id"`
 	//帐号	登录依据，建议用手机号
-	UserCode string `json:"user_code" gorm:"index:user_info_multi_code_mobile;type:varchar(100);not null;unique_index;"`
+	UserCode string `json:"user_code" gorm:"index:user_info_multi_code_mobile;type:varchar(200);not null;unique_index;"`
 	//眤称
-	Nick string `json:"nick" gorm:"type:varchar(50)"`
+	Nick string `json:"nick" gorm:"type:varchar(100)"`
 	//头像
-	Icon string `json:"icon" gorm:"type:varchar(300)"`
+	Icon string `json:"icon" gorm:"type:varchar(1000)"`
 	//手机号 登录依据
 	Mobile string `json:"mobile" gorm:"index:user_info_multi_code_mobile;type:varchar(50);not null;"`
 	//缺省手机登录帐号
 	MobileLoginDefault bool `json:"mobile_login_default" gorm:"index:user_info_multi_code_mobile;default:false;"`
 
 	//姓名
-	UserName string `json:"user_name" gorm:"type:varchar(50)"`
+	UserName string `json:"user_name" gorm:"type:varchar(200)"`
 	//状态	//	锁定时为false
 	Enabled bool `json:"enabled"`
 	//姓别(0,女1田,2保密)
