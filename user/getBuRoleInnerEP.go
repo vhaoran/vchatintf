@@ -111,7 +111,7 @@ func (r *GetBuRoleInnerH) ProxySD() endpoint.Endpoint {
 var once_GetBuRoleInner sync.Once
 var local_GetBuRoleInner_EP endpoint.Endpoint
 
-func (r *GetBuRoleInnerH) Call(in *GetBuRoleInnerIn) ([]*GetBuRoleInnerOut, error) {
+func (r *GetBuRoleInnerH) Call(in *GetBuRoleInnerIn) (*GetBuRoleInnerOut, error) {
 	once_GetBuRoleInner.Do(func() {
 		local_GetBuRoleInner_EP = new(GetBuRoleInnerH).ProxySD()
 	})
@@ -124,5 +124,5 @@ func (r *GetBuRoleInnerH) Call(in *GetBuRoleInnerIn) ([]*GetBuRoleInnerOut, erro
 		return nil, err
 	}
 
-	return result.([]*GetBuRoleInnerOut), nil
+	return result.(*GetBuRoleInnerOut), nil
 }
