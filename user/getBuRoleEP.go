@@ -110,7 +110,7 @@ func (r *GetBuRoleH) ProxySD() endpoint.Endpoint {
 var once_GetBuRole sync.Once
 var local_GetBuRole_EP endpoint.Endpoint
 
-func (r *GetBuRoleH) Call(in *GetBuRoleIn) ([]*GetBuRoleOut, error) {
+func (r *GetBuRoleH) Call(in *GetBuRoleIn) (*GetBuRoleOut, error) {
 	once_GetBuRole.Do(func() {
 		local_GetBuRole_EP = new(GetBuRoleH).ProxySD()
 	})
@@ -123,5 +123,5 @@ func (r *GetBuRoleH) Call(in *GetBuRoleIn) ([]*GetBuRoleOut, error) {
 		return nil, err
 	}
 
-	return result.([]*GetBuRoleOut), nil
+	return result.(*GetBuRoleOut), nil
 }
