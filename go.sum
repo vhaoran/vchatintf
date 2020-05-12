@@ -255,6 +255,8 @@ github.com/vhaoran/vchat v0.0.0-20200511123622-4018632afd6e h1:qeetcvKfq/CvXgfQX
 github.com/vhaoran/vchat v0.0.0-20200511123622-4018632afd6e/go.mod h1:/PmPf/D1MOOMWGevN5YxI+R9sesGyykcqp3X+9Y/tuw=
 github.com/vhaoran/vchat v0.0.0-20200512033203-c22786a5c399 h1:IKfwA/uM3g9EXBtBwZtHkelbq0yrDJ0ciUBaGBnhaw8=
 github.com/vhaoran/vchat v0.0.0-20200512033203-c22786a5c399/go.mod h1:/PmPf/D1MOOMWGevN5YxI+R9sesGyykcqp3X+9Y/tuw=
+github.com/vhaoran/vchat v0.0.0-20200512040055-f56c57ce869b h1:EmQAANEvqMJc5FIs4wrTyqWyqXu0SGUrHI9BWXC95uM=
+github.com/vhaoran/vchat v0.0.0-20200512040055-f56c57ce869b/go.mod h1:/PmPf/D1MOOMWGevN5YxI+R9sesGyykcqp3X+9Y/tuw=
 github.com/vhaoran/vchat v1.9.6 h1:rAcDCg77o8WaTY8U2OkizEyfZjBs3TlYowKsmAt7bpU=
 github.com/vhaoran/vchat v1.9.6/go.mod h1:poGyIZKDgXuia/331gwUk62gtgzfVAZpixvVPEFpwVo=
 github.com/vhaoran/vchat v1.9.7 h1:TGOm8hdbFPHpsQuNz1Iq0zj/XLR+W3HPPuh/URMVEho=

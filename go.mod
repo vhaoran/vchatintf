@@ -7,7 +7,7 @@ require (
 	github.com/go-kit/kit v0.9.0
 	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
-	github.com/vhaoran/vchat v0.0.0-20200512033203-c22786a5c399
+	github.com/vhaoran/vchat v0.0.0-20200512040055-f56c57ce869b
 	go.mongodb.org/mongo-driver v1.2.0
 	sigs.k8s.io/yaml v1.2.0 // indirect
 
