@@ -48,5 +48,10 @@ type CircleCommentRef struct {
 	NickRef     string `json:"nick"   bson:"nick"`
 	IconRef     string `json:"icon"   bson:"icon"`
 
+	FromUID         int64  `json:"from_uid"   bson:"from_uid"`
+	FromUserCodeRef string `json:"from_user_code"   bson:"from_user_code"`
+	FromNickRef     string `json:"from_nick"   bson:"from_nick"`
+	FromIconRef     string `json:"from_icon"   bson:"from_icon"`
+
 	Content string `json:"content"   bson:"content"`
 }
