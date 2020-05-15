@@ -5,7 +5,7 @@ up(){
    file="$2";
    echo "------------->""$file";
 
-   sed -E -i '' "s/github\.com\/vhaoran\/vchat .*/github\.com\/vhaoran\/vchatintf $ver/g"  "$file";
+   sed -E -i '' "s/github\.com\/vhaoran\/vchatintf .*/github\.com\/vhaoran\/vchatintf $ver/g"  "$file";
    echo "-------after update----------------"
    grep "vchatintf"  "$file"
 
