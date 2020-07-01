@@ -16,4 +16,11 @@ const (
 	NOTIFY_CIRCLE_COMMENT = 202
 	//"朋友圈评论回复"
 	NOTIFY_CIRCLE_REPLY = 203
+
+	//-----资金操作-------------------------
+	//充值 成功
+	NOTIFY_FINANCE_RECHARGE_OK = 601
+	//提现成功
+	NOTIFY_FINANCE_DRAWMONEY_OK = 602
+
 )
