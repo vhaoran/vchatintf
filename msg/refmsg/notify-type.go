@@ -1,5 +1,6 @@
 package refmsg
 
+//系统消息中的通知类型
 const (
 	//"添加好友"
 	NOTIFY_ADD_FRIEND = 101
@@ -22,5 +23,9 @@ const (
 	NOTIFY_FINANCE_RECHARGE_OK = 601
 	//提现成功
 	NOTIFY_FINANCE_DRAWMONEY_OK = 602
+
+	//某人领取红包
+	NOTIFY_FINANCE_FETCH_REDPACKET = 603
+	//
 
 )

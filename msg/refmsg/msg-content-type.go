@@ -1,8 +1,6 @@
 package refmsg
 
-// only for msg_type == 1
-// content type
-
+//只知用于私聊消息及群中聊中的类型
 const (
 	//普通文本消息
 	BT_COMMON = iota + 1
@@ -30,4 +28,5 @@ const (
 	//11	群名片
 	BT_CARD_GROUP
 	//BT_CARD_GROUP_TITLE = "群名片"
+
 )
