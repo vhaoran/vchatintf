@@ -1,4 +1,4 @@
 package msg
 
 // avoid package ref circle
-const MSTAG = "msgs"
+const MSTAG = "/msgs"

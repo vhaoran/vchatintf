@@ -1,5 +1,5 @@
 package util
 
 const (
-	MSTAG = "util"
+	MSTAG = "/util"
 )

@@ -1,3 +1,3 @@
 package user
 
-const MSTAG = "user"
+const MSTAG = "/user"
